@@ -23,6 +23,7 @@ const routes = [
       { path: 'introducao', name: 'ne-intro', component: () => import('./views/nemesiselements/IntroducaoView.vue') },
       { path: 'instalacao', name: 'ne-install', component: () => import('./views/nemesiselements/InstalacaoView.vue') },
       { path: 'toast-notificacao', name: 'ne-toast', component: () => import('./views/nemesiselements/ToastNotificacaoView.vue') },
+      { path: 'tooltip-elemento', name: 'ne-tooltip', component: () => import('./views/nemesiselements/TooltipElementoView.vue') },
     ]
   },
   {

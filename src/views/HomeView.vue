@@ -35,10 +35,10 @@ const packages = [
     name: 'NemesisElements',
     slug: 'nemesiselements',
     description: 'Componentes de interface para Vue 3: toasts, feedbacks e utilitários com animações e temas.',
-    badge: 'v0.1.0',
+    badge: 'v0.1.2',
     badgeType: 'yellow',
     status: 'Beta',
-    components: 1,
+    components: 2,
     icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>`,
     to: '/nemesiselements/introducao'
   }

@@ -48,6 +48,7 @@ const allGroups = {
       label: 'Componentes',
       items: [
         { label: 'ToastNotificacao', to: '/nemesiselements/toast-notificacao' },
+        { label: 'TooltipElemento', to: '/nemesiselements/tooltip-elemento' },
       ]
     },
   ],
