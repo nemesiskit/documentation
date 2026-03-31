@@ -32,15 +32,15 @@ const packages = [
     to: '/nemesischart/introducao'
   },
   {
-    name: 'NemesisUI',
-    slug: 'nemesisui',
-    description: 'Biblioteca de componentes de interface para Vue 3 com design system consistente e acessível.',
-    badge: 'Em breve',
+    name: 'NemesisElements',
+    slug: 'nemesiselements',
+    description: 'Componentes de interface para Vue 3: toasts, feedbacks e utilitários com animações e temas.',
+    badge: 'v0.1.0',
     badgeType: 'yellow',
-    status: 'Desenvolvimento',
-    components: null,
-    icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>`,
-    to: null
+    status: 'Beta',
+    components: 1,
+    icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>`,
+    to: '/nemesiselements/introducao'
   }
 ]
 </script>

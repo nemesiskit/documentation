@@ -6,13 +6,25 @@ import App from './App.vue'
 
 import 'primeflex/primeflex.css'
 import 'nemesischart/style.css'
+import 'nemesiselements/style.css'
 import './assets/main.css'
 
 import HomeView from './views/HomeView.vue'
 import NemesisChartView from './views/NemesisChartView.vue'
+import NemesisElementsView from './views/NemesisElementsView.vue'
 
 const routes = [
   { path: '/', name: 'home', component: HomeView },
+  {
+    path: '/nemesiselements',
+    component: NemesisElementsView,
+    children: [
+      { path: '', redirect: '/nemesiselements/introducao' },
+      { path: 'introducao', name: 'ne-intro', component: () => import('./views/nemesiselements/IntroducaoView.vue') },
+      { path: 'instalacao', name: 'ne-install', component: () => import('./views/nemesiselements/InstalacaoView.vue') },
+      { path: 'toast-notificacao', name: 'ne-toast', component: () => import('./views/nemesiselements/ToastNotificacaoView.vue') },
+    ]
+  },
   {
     path: '/nemesischart',
     component: NemesisChartView,

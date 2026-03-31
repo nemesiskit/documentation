@@ -6,38 +6,57 @@ defineProps({ open: Boolean })
 
 const route = useRoute()
 
-const navGroups = [
-  {
-    label: 'NemesisChart',
-    prefix: '/nemesischart',
-    items: [
-      { label: 'Introdução', to: '/nemesischart/introducao' },
-      { label: 'Instalação', to: '/nemesischart/instalacao' },
-    ]
-  },
-  {
-    label: 'Componentes',
-    prefix: '/nemesischart',
-    items: [
-      { label: 'CardBase', to: '/nemesischart/card-base' },
-      { label: 'CardColuna', to: '/nemesischart/card-coluna' },
-      { label: 'CardBarra', to: '/nemesischart/card-barra' },
-      { label: 'CardLinhas', to: '/nemesischart/card-linhas' },
-      { label: 'CardRosquinha', to: '/nemesischart/card-rosquinha' },
-      { label: 'CardSemiCirculo', to: '/nemesischart/card-semi-circulo' },
-      { label: 'CardPolar', to: '/nemesischart/card-polar' },
-      { label: 'CardProgresso', to: '/nemesischart/card-progresso' },
-    ]
-  },
-  {
-    label: 'Guias',
-    prefix: '/nemesischart',
-    items: [
-      { label: 'Temas', to: '/nemesischart/temas' },
-      { label: 'Paleta de Cores', to: '/nemesischart/cores' },
-    ]
-  },
-]
+const allGroups = {
+  nemesischart: [
+    {
+      label: 'NemesisChart',
+      items: [
+        { label: 'Introdução', to: '/nemesischart/introducao' },
+        { label: 'Instalação', to: '/nemesischart/instalacao' },
+      ]
+    },
+    {
+      label: 'Componentes',
+      items: [
+        { label: 'CardBase', to: '/nemesischart/card-base' },
+        { label: 'CardColuna', to: '/nemesischart/card-coluna' },
+        { label: 'CardBarra', to: '/nemesischart/card-barra' },
+        { label: 'CardLinhas', to: '/nemesischart/card-linhas' },
+        { label: 'CardRosquinha', to: '/nemesischart/card-rosquinha' },
+        { label: 'CardSemiCirculo', to: '/nemesischart/card-semi-circulo' },
+        { label: 'CardPolar', to: '/nemesischart/card-polar' },
+        { label: 'CardProgresso', to: '/nemesischart/card-progresso' },
+      ]
+    },
+    {
+      label: 'Guias',
+      items: [
+        { label: 'Temas', to: '/nemesischart/temas' },
+        { label: 'Paleta de Cores', to: '/nemesischart/cores' },
+      ]
+    },
+  ],
+  nemesiselements: [
+    {
+      label: 'NemesisElements',
+      items: [
+        { label: 'Introdução', to: '/nemesiselements/introducao' },
+        { label: 'Instalação', to: '/nemesiselements/instalacao' },
+      ]
+    },
+    {
+      label: 'Componentes',
+      items: [
+        { label: 'ToastNotificacao', to: '/nemesiselements/toast-notificacao' },
+      ]
+    },
+  ],
+}
+
+const navGroups = computed(() => {
+  if (route.path.startsWith('/nemesiselements')) return allGroups.nemesiselements
+  return allGroups.nemesischart
+})
 </script>
 
 <template>

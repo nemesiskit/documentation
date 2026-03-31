@@ -1,3 +1,9 @@
+<script setup>
+import { ToastNotificacao } from 'nemesiselements'
+</script>
+
 <template>
-  <RouterView />
+  <ToastNotificacao>
+    <RouterView />
+  </ToastNotificacao>
 </template>
