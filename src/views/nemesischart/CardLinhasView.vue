@@ -4,53 +4,67 @@ import { CardLinhas } from 'nemesischart'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable from '@/components/PropsTable.vue'
 
-const tema = ref('Light')
-const moeda = ref(false)
-const corDetalhe = ref('#2563eb')
+const tema = ref('light')
+const tipoValor = ref('moeda')
+const corDetalhes = ref('#3B82F6')
 
-const dados = [
-  { rotulo: 'Jan', quantidade: 12400 },
-  { rotulo: 'Fev', quantidade: 18900 },
-  { rotulo: 'Mar', quantidade: 14200 },
-  { rotulo: 'Abr', quantidade: 22100 },
-  { rotulo: 'Mai', quantidade: 19800 },
-  { rotulo: 'Jun', quantidade: 28500 },
-  { rotulo: 'Jul', quantidade: 24300 },
-  { rotulo: 'Ago', quantidade: 31000 },
+const data = [
+  { rotulo: 'Jan', quantidade: 1200 },
+  { rotulo: 'Fev', quantidade: 2800 },
+  { rotulo: 'Mar', quantidade: 3200 },
+  { rotulo: 'Abr', quantidade: 2100 },
+  { rotulo: 'Mai', quantidade: 4500 },
+  { rotulo: 'Jun', quantidade: 3900 },
+  { rotulo: 'Jul', quantidade: 5200 },
 ]
 
 const props = [
-  { name: 'dados', type: 'Array<{ rotulo, quantidade }>', default: 'exemplo', description: 'Pontos da linha com rótulo e valor.' },
-  { name: 'corDetalhe', type: 'String', default: 'Obrigatório', description: 'Cor da linha e do gradiente de preenchimento.' },
-  { name: 'moeda', type: 'Boolean', default: 'false', description: 'Formata o eixo Y e tooltips como BRL.' },
-  { name: 'legendaGraficoVisivel', type: 'Boolean', default: 'false', description: 'Exibir legenda abaixo do gráfico.' },
-  { name: 'opcoes', type: 'Object', default: '{}', description: 'Opções extras do Chart.js para customização avançada.' },
-  { name: 'minHeight', type: 'String', default: "'250px'", description: 'Altura mínima do canvas.' },
-  { name: 'tema', type: "'Light' | 'Dark' | 'Transparent'", default: "'Light'", description: 'Tema visual.' },
-  { name: 'titulo', type: 'String', default: "''", description: 'Título do card.' },
-  { name: 'descricao', type: 'String', default: "''", description: 'Subtítulo do card.' },
+  { name: 'data', type: 'Array<{ rotulo, quantidade }>', default: 'amostra', description: 'Pontos do gráfico.' },
+  { name: 'corDetalhes', type: 'String', default: "'#3B82F6'", description: 'Cor da linha e do gradiente sob a curva.' },
+  { name: 'tema', type: "'light' | 'dark'", default: "'light'", description: 'Paleta base do card.' },
+  { name: 'direcao', type: "'top' | 'bottom' | 'left' | 'right'", default: "'top'", description: 'Posição do header em relação ao gráfico.' },
+  { name: 'tipoValor', type: "'numero' | 'moeda' | 'percentual'", default: "'numero'", description: 'Formatação dos valores no tooltip e eixo.' },
+  { name: 'locale', type: 'String', default: "'pt-BR'", description: 'Locale do Intl.' },
+  { name: 'moeda', type: 'String', default: "'BRL'", description: 'Código ISO da moeda.' },
+  { name: 'height', type: 'String | Number', default: '280', description: 'Altura do gráfico em px.' },
+  { name: 'linhasReferencia', type: 'Object | Array', default: 'null', description: 'Linhas horizontais de referência sobre o gráfico.' },
+  { name: 'legenda / sublegenda / titulo / descricao', type: 'String', default: 'null', description: 'Cabeçalho do card.' },
+  { name: 'botaoVisivel', type: 'Boolean', default: 'false', description: 'Exibe o botão "Ver mais".' },
+  { name: 'textoBotao', type: 'String', default: "'Ver mais'", description: 'Texto do botão.' },
+  { name: 'exportar', type: 'Boolean', default: 'false', description: 'Exibe o botão de exportação como PNG.' },
+  { name: 'nomeArquivoExport', type: 'String', default: "'card-linhas.png'", description: 'Nome do arquivo gerado.' },
+  { name: 'corFundo / corTexto / corBorda', type: 'String', default: '—', description: 'Overrides do tema.' },
+  { name: 'borderRadius / sombra', type: 'String | Number', default: '—', description: 'Customização do card.' },
 ]
 
-const code = `<script setup>
+const basicCode = `<script setup>
 import { CardLinhas } from 'nemesischart'
 
-const dados = [
-  { rotulo: 'Jan', quantidade: 12400 },
-  { rotulo: 'Fev', quantidade: 18900 },
-  { rotulo: 'Mar', quantidade: 14200 },
-  { rotulo: 'Abr', quantidade: 22100 },
+const data = [
+  { rotulo: 'Jan', quantidade: 1200 },
+  { rotulo: 'Fev', quantidade: 2800 },
+  { rotulo: 'Mar', quantidade: 3200 },
 ]
 <\/script>
 
 <template>
   <CardLinhas
-    titulo="Receita Acumulada"
-    descricao="Janeiro — Abril 2025"
-    :dados="dados"
-    corDetalhe="#2563eb"
-    :moeda="true"
+    legenda="Faturamento"
+    sublegenda="2026"
+    titulo="R$ 7.2k"
+    descricao="acumulado"
+    tipoValor="moeda"
+    corDetalhes="#3B82F6"
+    :data="data"
   />
 </template>`
+
+const referenciaCode = `<CardLinhas
+  legenda="Receita"
+  titulo="R$ 5.4k"
+  :data="data"
+  :linhasReferencia="{ valor: 3000, rotulo: 'Meta', cor: '#10B981' }"
+/>`
 </script>
 
 <template>
@@ -60,57 +74,55 @@ const dados = [
     </div>
     <h1>CardLinhas</h1>
     <p>
-      Gráfico de linhas com preenchimento gradiente. Inclui tooltip customizado com
-      indicador vertical, animação de entrada via scroll e formatação de moeda no eixo Y.
+      Gráfico de linhas com gradiente sob a curva. Ideal para séries temporais — faturamento,
+      tráfego, métricas acumuladas — com tooltips formatados e suporte a linhas de referência.
     </p>
 
     <h2>Demonstração</h2>
+
     <div class="demo-controls">
       <div class="control-row">
         <label class="control-label">Tema:</label>
         <div class="control-group">
-          <button v-for="t in ['Light', 'Dark', 'Transparent']" :key="t" class="control-btn" :class="{ active: tema === t }" @click="tema = t">{{ t }}</button>
+          <button v-for="t in ['light', 'dark']" :key="t" class="control-btn" :class="{ active: tema === t }" @click="tema = t">{{ t }}</button>
         </div>
       </div>
       <div class="control-row">
-        <label class="control-label">Moeda:</label>
+        <label class="control-label">Valor:</label>
         <div class="control-group">
-          <button class="control-btn" :class="{ active: moeda }" @click="moeda = !moeda">{{ moeda ? 'Sim' : 'Não' }}</button>
+          <button v-for="v in ['numero', 'moeda', 'percentual']" :key="v" class="control-btn" :class="{ active: tipoValor === v }" @click="tipoValor = v">{{ v }}</button>
         </div>
       </div>
       <div class="control-row">
         <label class="control-label">Cor:</label>
-        <input type="color" v-model="corDetalhe" class="color-input" />
-        <span class="color-value">{{ corDetalhe }}</span>
+        <input type="color" v-model="corDetalhes" class="color-input" />
+        <span class="color-value">{{ corDetalhes }}</span>
       </div>
     </div>
-    <div class="demo-section" :class="{ 'demo-dark': tema === 'Dark', 'demo-transparent': tema === 'Transparent' }">
+
+    <div class="demo-section" :class="{ 'demo-dark': tema === 'dark' }">
       <CardLinhas
         :tema="tema"
-        titulo="Receita Mensal"
-        descricao="Jan — Ago 2025"
-        legenda="Financeiro"
-        :dados="dados"
-        :corDetalhe="corDetalhe"
-        :moeda="moeda"
+        legenda="Faturamento"
+        sublegenda="Jan — Jul 2026"
+        titulo="R$ 22.9k"
+        descricao="acumulado no semestre"
+        :tipoValor="tipoValor"
+        :corDetalhes="corDetalhes"
+        :data="data"
+        :botaoVisivel="true"
       />
     </div>
 
-    <h2>Uso</h2>
-    <CodeBlock :code="code" language="vue" />
+    <h2>Uso básico</h2>
+    <CodeBlock :code="basicCode" language="vue" />
+
+    <h2>Linhas de referência</h2>
+    <p>Defina uma ou várias linhas horizontais sobre o gráfico (ex.: meta, média):</p>
+    <CodeBlock :code="referenciaCode" language="vue" />
 
     <h2>Props</h2>
     <PropsTable :props="props" />
-
-    <div class="callout">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-      </svg>
-      <div>
-        O CardLinhas usa <strong style="color: var(--color-text)">IntersectionObserver</strong> para
-        inicializar o gráfico apenas quando ele entra na viewport, otimizando a performance em páginas longas.
-      </div>
-    </div>
   </div>
 </template>
 
@@ -123,6 +135,4 @@ const dados = [
 .control-btn.active { background: rgba(124,111,205,0.15); border-color: rgba(124,111,205,0.4); color: var(--color-accent-2); }
 .color-input { width: 32px; height: 28px; border: 1px solid var(--color-border); border-radius: 4px; cursor: pointer; background: transparent; }
 .color-value { font-size: 0.8rem; font-family: var(--font-mono); color: var(--color-text-muted); }
-.callout { display: flex; gap: 0.75rem; align-items: flex-start; background: rgba(124,111,205,0.08); border: 1px solid rgba(124,111,205,0.25); border-radius: var(--radius); padding: 1rem 1.25rem; font-size: 0.875rem; color: var(--color-text-muted); margin-top: 1.5rem; }
-.callout svg { flex-shrink: 0; margin-top: 2px; color: var(--color-accent-2); }
 </style>

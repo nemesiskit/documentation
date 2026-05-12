@@ -2,76 +2,86 @@
 import CodeBlock from '@/components/CodeBlock.vue'
 import { RouterLink } from 'vue-router'
 
-const installCode = `npm install nemesischart chart.js`
+const installCode = `npm install nemesischart chart.js primevue primeflex primeicons`
 
 const setupCode = `// main.js
 import { createApp } from 'vue'
-import App from './App.vue'
+import PrimeVue from 'primevue/config'
+import NemesisChart from 'nemesischart'
+
+import 'primeflex/primeflex.css'
+import 'primeicons/primeicons.css'
 import 'nemesischart/style.css'  // estilos obrigatórios
 
-createApp(App).mount('#app')`
+import App from './App.vue'
+
+createApp(App)
+  .use(PrimeVue)
+  .use(NemesisChart)
+  .mount('#app')`
 
 const usageCode = `<script setup>
-import { CardColuna } from 'nemesischart'
+import { CardLinhas } from 'nemesischart'
 
-const dados = [
-  { rotulo: 'Jan', quantidade: 40 },
-  { rotulo: 'Fev', quantidade: 65 },
-  { rotulo: 'Mar', quantidade: 30 },
+const data = [
+  { rotulo: 'Jan', quantidade: 1200 },
+  { rotulo: 'Fev', quantidade: 2800 },
+  { rotulo: 'Mar', quantidade: 3200 },
 ]
 <\/script>
 
 <template>
-  <CardColuna
-    titulo="Vendas Mensais"
-    descricao="Últimos 3 meses"
-    :dados="dados"
-    corPaleta="#2563eb"
+  <CardLinhas
+    legenda="Faturamento"
+    sublegenda="2026"
+    titulo="R$ 7.2k"
+    descricao="acumulado"
+    tipoValor="moeda"
+    :data="data"
   />
 </template>`
 
 const features = [
   {
-    title: '8 componentes',
-    desc: 'Barras, colunas, linhas, rosquinha, polar, semi-círculo e progresso.',
+    title: '7 componentes',
+    desc: 'Linhas, barras, pizza, polar, progresso, container base e wrapper Chart.js.',
     icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>`
   },
   {
-    title: '3 temas',
-    desc: 'Light, Dark e Transparent para se adaptar a qualquer layout.',
+    title: '2 temas',
+    desc: 'light e dark prontos, com override total via corFundo, corTexto e corBorda.',
     icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>`
   },
   {
-    title: 'Animações GSAP',
-    desc: 'Entrada suave com stagger e animações baseadas em scroll.',
-    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`
+    title: 'Formatação inteligente',
+    desc: 'tipoValor numero/moeda/percentual com locale e moeda configuráveis via Intl.',
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`
   },
   {
-    title: 'Paleta automática',
-    desc: 'Gere N cores harmônicas a partir de uma cor base.',
-    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="10.5" r="2.5"/><circle cx="8.5" cy="7.5" r="2.5"/><circle cx="6.5" cy="12.5" r="2.5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>`
+    title: 'Exportação para PNG',
+    desc: 'Ative exportar e baixe o card como imagem com um clique.',
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`
   },
   {
-    title: 'Responsivo',
-    desc: 'Layout automático entre horizontal e vertical conforme espaço.',
-    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>`
+    title: 'Slots flexíveis',
+    desc: 'Substitua legenda, título, descrição, actions e footer com seus próprios componentes.',
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>`
   },
   {
     title: 'Vue 3 + Composition API',
-    desc: 'Construído com script setup e composables reutilizáveis.',
+    desc: 'Composables expostos: useTema, useFormatadorValor, useTooltipExterno, useExportarImagem.',
     icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`
   },
 ]
 
 const components = [
   { name: 'CardBase', label: 'Container base', to: '/nemesischart/card-base', icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>` },
-  { name: 'CardColuna', label: 'Barras verticais', to: '/nemesischart/card-coluna', icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="18" y="3" width="4" height="18"/><rect x="10" y="8" width="4" height="13"/><rect x="2" y="13" width="4" height="8"/></svg>` },
-  { name: 'CardBarra', label: 'Barras horizontais', to: '/nemesischart/card-barra', icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="18" width="18" height="4" rx="1"/><rect x="3" y="10" width="12" height="4" rx="1"/><rect x="3" y="2" width="7" height="4" rx="1"/></svg>` },
   { name: 'CardLinhas', label: 'Gráfico de linha', to: '/nemesischart/card-linhas', icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>` },
-  { name: 'CardRosquinha', label: 'Gráfico donut', to: '/nemesischart/card-rosquinha', icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>` },
-  { name: 'CardSemiCirculo', label: 'Semicírculo', to: '/nemesischart/card-semi-circulo', icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a10 10 0 0 1 10 10H2A10 10 0 0 1 12 2z"/></svg>` },
+  { name: 'CardBarra', label: 'Barras vertical/horizontal', to: '/nemesischart/card-barra', icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="18" width="18" height="4" rx="1"/><rect x="3" y="10" width="12" height="4" rx="1"/><rect x="3" y="2" width="7" height="4" rx="1"/></svg>` },
+  { name: 'CardPizza', label: 'Donut com tabela', to: '/nemesischart/card-pizza', icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>` },
   { name: 'CardPolar', label: 'Área polar', to: '/nemesischart/card-polar', icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>` },
-  { name: 'CardProgresso', label: 'Barra de progresso', to: '/nemesischart/card-progresso', icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="9" width="20" height="6" rx="3"/><rect x="2" y="9" width="14" height="6" rx="3" fill="currentColor" opacity="0.4"/></svg>` },
+  { name: 'CardProgresso', label: 'Progresso linear/circular', to: '/nemesischart/card-progresso', icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="9" width="20" height="6" rx="3"/><rect x="2" y="9" width="14" height="6" rx="3" fill="currentColor" opacity="0.4"/></svg>` },
+  { name: 'ChartBase', label: 'Wrapper Chart.js', to: '/nemesischart/chart-base', icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg>` },
 ]
 </script>
 
@@ -79,15 +89,18 @@ const components = [
   <div class="doc-content">
     <div class="page-badge">
       <span class="badge badge-purple">NemesisChart</span>
-      <span class="badge badge-green">v1.0.0</span>
+      <span class="badge badge-green">v2.0.5</span>
     </div>
 
     <h1>Introdução</h1>
     <p>
-      <strong style="color: #fff">NemesisChart</strong> é uma biblioteca de componentes Vue 3 para visualização de dados.
-      Combina <strong style="color: var(--color-accent-2)">Chart.js</strong> para renderização e
-      <strong style="color: var(--color-accent-2)">GSAP</strong> para animações de entrada, entregando
-      gráficos elegantes prontos para produção.
+      <strong style="color: #fff">NemesisChart</strong> é uma biblioteca de componentes Vue 3 para construção
+      rápida de cards e dashboards com gráficos. Construída sobre
+      <strong style="color: var(--color-accent-2)">Chart.js</strong>,
+      <strong style="color: var(--color-accent-2)">PrimeVue</strong> e
+      <strong style="color: var(--color-accent-2)">PrimeFlex</strong>, todos os cards seguem o mesmo padrão:
+      legenda, sublegenda, valor de destaque, descrição e o gráfico correspondente — com suporte a temas
+      claro/escuro, formatação automática de valores e exportação como imagem.
     </p>
 
     <div class="feature-grid">
@@ -101,7 +114,7 @@ const components = [
     </div>
 
     <h2>Componentes disponíveis</h2>
-    <p>A biblioteca exporta 8 componentes prontos para uso:</p>
+    <p>A biblioteca exporta 7 componentes prontos para uso:</p>
 
     <div class="components-grid">
       <RouterLink
@@ -117,10 +130,10 @@ const components = [
     </div>
 
     <h2>Início rápido</h2>
-    <p>Instale o pacote e o peer dependency Chart.js:</p>
+    <p>Instale o pacote e seus peer dependencies:</p>
     <CodeBlock :code="installCode" language="bash" />
 
-    <p>Importe o CSS no seu <code>main.js</code>:</p>
+    <p>Registre o plugin no seu <code>main.js</code>:</p>
     <CodeBlock :code="setupCode" language="js" />
 
     <p>Use qualquer componente diretamente no template:</p>

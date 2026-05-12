@@ -1,35 +1,38 @@
 <script setup>
-import { CardColuna, CardRosquinha } from 'nemesischart'
+import { CardBarra, CardPizza } from 'nemesischart'
 import CodeBlock from '@/components/CodeBlock.vue'
 
-const dados = [
+const data = [
   { rotulo: 'A', quantidade: 40 },
   { rotulo: 'B', quantidade: 75 },
   { rotulo: 'C', quantidade: 55 },
   { rotulo: 'D', quantidade: 90 },
 ]
 
-const dadosDonut = [
+const dataPizza = [
   { rotulo: 'Alpha', quantidade: 45 },
-  { rotulo: 'Beta', quantidade: 30 },
+  { rotulo: 'Beta',  quantidade: 30 },
   { rotulo: 'Gamma', quantidade: 25 },
 ]
 
-const temaCode = `<!-- Tema Light (padrão) -->
-<CardColuna tema="Light" titulo="Vendas" :dados="dados" />
+const temaCode = `<!-- Tema light (padrão) -->
+<CardBarra tema="light" titulo="Vendas" :data="data" />
 
-<!-- Tema Dark -->
-<CardColuna tema="Dark" titulo="Vendas" :dados="dados" />
+<!-- Tema dark -->
+<CardBarra tema="dark" titulo="Vendas" :data="data" />
 
-<!-- Transparente (sem background) -->
-<CardColuna tema="Transparent" titulo="Vendas" :dados="dados" />
+<!-- Override de cores (independente do tema) -->
+<CardBarra
+  corFundo="#1a0a2e"
+  corTexto="#fff"
+  corBorda="#2d1845"
+  titulo="Custom"
+  :data="data"
+/>`
 
-<!-- Background customizado -->
-<CardColuna corFundo="#1a0a2e" titulo="Vendas" :dados="dados" />`
-
-const globalCode = `/* Encapsular num wrapper com cor de fundo -->
+const wrapperCode = `<!-- Envolva o card dark em um container escuro para melhor integração -->
 <div style="background: #0d1117; padding: 1.5rem; border-radius: 12px;">
-  <CardColuna tema="Dark" titulo="Dashboard" :dados="dados" />
+  <CardBarra tema="dark" titulo="Dashboard" :data="data" />
 </div>`
 </script>
 
@@ -37,35 +40,31 @@ const globalCode = `/* Encapsular num wrapper com cor de fundo -->
   <div class="doc-content">
     <h1>Temas</h1>
     <p>
-      Todos os componentes do NemesisChart suportam três temas via prop <code>tema</code>,
-      além da possibilidade de definir um background customizado.
+      Todos os componentes do NemesisChart aceitam a prop <code>tema</code> com dois valores:
+      <code>light</code> (padrão) e <code>dark</code>. Para personalizações mais finas, use
+      <code>corFundo</code>, <code>corTexto</code> e <code>corBorda</code> — esses overrides têm
+      prioridade sobre o tema escolhido.
     </p>
 
     <h2>Light</h2>
     <p>Tema padrão com fundos claros e texto escuro.</p>
     <div class="demo-section">
-      <CardColuna tema="Light" titulo="Tema Light" descricao="Padrão" :dados="dados" corPaleta="#2563eb" />
+      <CardBarra tema="light" legenda="Tema" titulo="Light" descricao="padrão" :data="data" corDetalhes="#3B82F6" />
     </div>
 
     <h2>Dark</h2>
     <p>Fundo escuro com texto claro. Ideal para dashboards noturnos.</p>
     <div class="demo-section demo-dark">
-      <CardColuna tema="Dark" titulo="Tema Dark" descricao="Modo escuro" :dados="dados" corPaleta="#2563eb" />
-    </div>
-
-    <h2>Transparent</h2>
-    <p>Sem background — o card herda a cor de fundo do elemento pai.</p>
-    <div class="demo-section demo-transparent">
-      <CardRosquinha tema="Transparent" titulo="Transparente" :dados="dadosDonut" corPaleta="#fff" :legendaGraficoVisivel="false" valor="100" valorDescricao="Total" />
+      <CardBarra tema="dark" legenda="Tema" titulo="Dark" descricao="modo escuro" :data="data" corDetalhes="#60A5FA" />
     </div>
 
     <h2>Background customizado</h2>
-    <p>Use <code>corFundo</code> para qualquer cor hex ou rgb, independente do tema.</p>
+    <p>Use <code>corFundo</code> (e opcionalmente <code>corTexto</code>) para qualquer cor hex/rgb, sobrescrevendo o tema.</p>
     <div class="demo-section">
       <div class="custom-bg-demo">
-        <CardColuna corFundo="#0f172a" titulo="Custom #0f172a" :dados="dados" corPaleta="#38bdf8" />
-        <CardColuna corFundo="#1a0a2e" titulo="Custom #1a0a2e" :dados="dados" corPaleta="#a855f7" />
-        <CardColuna corFundo="#0a1f1a" titulo="Custom #0a1f1a" :dados="dados" corPaleta="#22c55e" />
+        <CardPizza corFundo="#0f172a" corTexto="#fff" corBorda="#1e293b" legenda="Custom" titulo="#0f172a" :data="dataPizza" :cores="['#38bdf8','#0ea5e9','#0284c7']" />
+        <CardPizza corFundo="#1a0a2e" corTexto="#fff" corBorda="#2d1845" legenda="Custom" titulo="#1a0a2e" :data="dataPizza" :cores="['#a855f7','#9333ea','#7e22ce']" />
+        <CardPizza corFundo="#0a1f1a" corTexto="#fff" corBorda="#143028" legenda="Custom" titulo="#0a1f1a" :data="dataPizza" :cores="['#22c55e','#16a34a','#15803d']" />
       </div>
     </div>
 
@@ -73,16 +72,16 @@ const globalCode = `/* Encapsular num wrapper com cor de fundo -->
     <CodeBlock :code="temaCode" language="vue" />
 
     <h2>Dica: wrapper externo</h2>
-    <p>Para o tema Dark, envolva em um container escuro para melhor integração:</p>
-    <CodeBlock :code="globalCode" language="vue" />
+    <p>No tema <code>dark</code>, envolva o card em um container escuro para melhor integração visual:</p>
+    <CodeBlock :code="wrapperCode" language="vue" />
 
     <div class="callout">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
       </svg>
       <div>
-        O tema <code>Transparent</code> é especialmente útil para embutir gráficos em cards ou
-        seções que já têm um background definido no layout pai.
+        Os tokens visuais (<code>borderRadius</code>, <code>sombra</code>) também podem ser ajustados
+        em conjunto com o tema, dando aos cards um visual customizado sem renunciar à paleta padrão.
       </div>
     </div>
   </div>
@@ -91,7 +90,7 @@ const globalCode = `/* Encapsular num wrapper com cor de fundo -->
 <style scoped>
 .custom-bg-demo {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 1rem;
 }
 .callout { display: flex; gap: 0.75rem; align-items: flex-start; background: rgba(124,111,205,0.08); border: 1px solid rgba(124,111,205,0.25); border-radius: var(--radius); padding: 1rem 1.25rem; font-size: 0.875rem; color: var(--color-text-muted); margin-top: 1.5rem; }

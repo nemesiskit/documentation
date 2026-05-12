@@ -4,56 +4,65 @@ import { CardBase } from 'nemesischart'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable from '@/components/PropsTable.vue'
 
-const tema = ref('Light')
+const tema = ref('light')
 
 const props = [
-  { name: 'tema', type: "'Light' | 'Dark' | 'Transparent'", default: "'Light'", description: 'Tema visual do card.' },
-  { name: 'corFundo', type: 'String', default: '—', description: 'Cor de fundo customizada (hex/rgb). Sobrescreve o tema.' },
-  { name: 'legenda', type: 'String', default: '—', description: 'Rótulo superior esquerdo (exibido em maiúsculo).' },
-  { name: 'sublegenda', type: 'String', default: '—', description: 'Subtítulo abaixo da legenda.' },
-  { name: 'tituloVisivel', type: 'Boolean', default: 'true', description: 'Exibir ou ocultar o bloco de título/descrição.' },
-  { name: 'titulo', type: 'String', default: "''", description: 'Título principal do card.' },
-  { name: 'descricao', type: 'String', default: "''", description: 'Subtítulo abaixo do título.' },
-  { name: 'botaoVisivel', type: 'Boolean', default: 'false', description: 'Exibir link de ação no canto superior direito.' },
-  { name: 'textoBotao', type: 'String', default: "'Ver Todos'", description: 'Texto do link de ação.' },
-  { name: 'direcao', type: "'vertical' | 'horizontal'", default: "'vertical'", description: 'Direção do layout do conteúdo.' },
-  { name: 'minHeight', type: 'String', default: "'0px'", description: 'Altura mínima da área de conteúdo.' },
+  { name: 'legenda', type: 'String', default: 'null', description: 'Rótulo superior (categoria do card).' },
+  { name: 'sublegenda', type: 'String', default: 'null', description: 'Texto auxiliar exibido abaixo da legenda.' },
+  { name: 'titulo', type: 'String', default: 'null', description: 'Valor de destaque do card.' },
+  { name: 'descricao', type: 'String', default: 'null', description: 'Texto complementar do título.' },
+  { name: 'tema', type: "'light' | 'dark'", default: "'light'", description: 'Paleta base do card.' },
+  { name: 'corFundo', type: 'String', default: 'null', description: 'Sobrescreve a cor de fundo do tema.' },
+  { name: 'corTexto', type: 'String', default: 'null', description: 'Sobrescreve a cor do texto.' },
+  { name: 'corBorda', type: 'String', default: "'#EAE8E8'", description: 'Cor da borda externa.' },
+  { name: 'borderRadius', type: 'String | Number', default: "'0.75rem'", description: 'Raio da borda do card.' },
+  { name: 'sombra', type: 'String', default: "'none'", description: 'Box-shadow do card.' },
+  { name: 'alinhamento', type: "'left' | 'center' | 'right'", default: "'left'", description: 'Alinhamento horizontal do conteúdo principal.' },
+  { name: 'botaoVisivel', type: 'Boolean', default: 'true', description: 'Exibe o botão "Ver mais" no canto superior direito.' },
+  { name: 'textoBotao', type: 'String', default: "'Ver Todos'", description: 'Texto do botão de ação.' },
+  { name: 'exportar', type: 'Boolean', default: 'false', description: 'Exibe o botão de exportação como PNG.' },
+  { name: 'nomeArquivoExport', type: 'String', default: "'card-base.png'", description: 'Nome do arquivo gerado ao exportar.' },
 ]
 
 const events = [
-  { name: '@botao-click', description: 'Emitido ao clicar no botão/link de ação.' },
-  { name: '@anim-complete', description: 'Emitido quando a animação GSAP de entrada finaliza.' },
+  { name: '@botaoAcao', description: 'Emitido ao clicar no botão "Ver mais".' },
+  { name: '@exportado', description: 'Emitido após o PNG ser gerado e baixado.' },
 ]
 
 const slots = [
-  { name: '#slot-content', description: 'Área principal para o conteúdo (gráfico, tabela, etc).' },
-  { name: '#slot-legenda', description: 'Conteúdo customizado para a legenda (quando prop não informada).' },
-  { name: '#slot-sublegenda', description: 'Conteúdo customizado para a sublegenda.' },
-  { name: '#slot-actions', description: 'Área de ações no topo direito.' },
+  { name: '#legenda', description: 'Substitui a legenda.' },
+  { name: '#sublegenda', description: 'Substitui a sublegenda.' },
+  { name: '#titulo', description: 'Substitui o título.' },
+  { name: '#descricao', description: 'Substitui a descrição.' },
+  { name: '#actions', description: 'Área de ações no topo direito (substitui o botão padrão).' },
+  { name: '#default', description: 'Conteúdo principal — onde entra seu gráfico ou conteúdo customizado.' },
+  { name: '#footer', description: 'Conteúdo extra abaixo do gráfico/conteúdo principal.' },
 ]
 
 const basicCode = `<CardBase
-  titulo="Relatório Mensal"
-  descricao="Dados de Março 2025"
   legenda="Vendas"
+  sublegenda="Março"
+  titulo="R$ 12.450"
+  descricao="acumulado no mês"
   botaoVisivel
   textoBotao="Ver detalhes"
-  @botao-click="handleClick"
+  @botaoAcao="abrirRelatorio"
 >
-  <template #slot-content>
-    <!-- seu conteúdo aqui -->
-    <p>Gráfico ou tabela...</p>
+  <p>Conteúdo customizado aqui (gráfico, tabela, etc.)</p>
+
+  <template #footer>
+    <small>Atualizado há 5 minutos.</small>
   </template>
 </CardBase>`
 
 const temaCode = `<!-- Tema escuro -->
-<CardBase tema="Dark" titulo="Dashboard" />
+<CardBase tema="dark" titulo="Dashboard" />
 
-<!-- Fundo transparente -->
-<CardBase tema="Transparent" titulo="Embutido" />
+<!-- Cor de fundo personalizada -->
+<CardBase corFundo="#1a1040" corTexto="#fff" titulo="Custom" />
 
-<!-- Cor personalizada -->
-<CardBase corFundo="#1a1040" titulo="Custom" />`
+<!-- Sem botão de ação -->
+<CardBase :botaoVisivel="false" titulo="Somente leitura" />`
 </script>
 
 <template>
@@ -63,9 +72,9 @@ const temaCode = `<!-- Tema escuro -->
     </div>
     <h1>CardBase</h1>
     <p>
-      Container base que envolve todos os componentes do NemesisChart. Fornece o layout padrão com
-      título, legenda, botão de ação e animações de entrada via GSAP.
-      Pode ser usado diretamente para criar cards customizados.
+      Esqueleto sem gráfico. Fornece o layout padrão dos cards do NemesisChart — legenda, título,
+      descrição, botão de ação e área de conteúdo via slot — para criar visualizações customizadas
+      mantendo o visual da biblioteca.
     </p>
 
     <h2>Demonstração</h2>
@@ -74,7 +83,7 @@ const temaCode = `<!-- Tema escuro -->
       <label class="control-label">Tema:</label>
       <div class="control-group">
         <button
-          v-for="t in ['Light', 'Dark', 'Transparent']"
+          v-for="t in ['light', 'dark']"
           :key="t"
           class="control-btn"
           :class="{ active: tema === t }"
@@ -83,29 +92,27 @@ const temaCode = `<!-- Tema escuro -->
       </div>
     </div>
 
-    <div class="demo-section" :class="{ 'demo-dark': tema === 'Dark', 'demo-transparent': tema === 'Transparent' }">
+    <div class="demo-section" :class="{ 'demo-dark': tema === 'dark' }">
       <CardBase
         :tema="tema"
-        titulo="Exemplo de Card"
-        descricao="Subtítulo do card"
-        legenda="Categoria"
-        sublegenda="Detalhes"
+        legenda="Vendas"
+        sublegenda="Março"
+        titulo="R$ 12.450"
+        descricao="acumulado no mês"
         :botaoVisivel="true"
-        textoBotao="Ver todos"
+        textoBotao="Ver detalhes"
         style="max-width: 500px; margin: 0 auto;"
       >
-        <template #slot-content>
-          <div style="padding: 2rem; text-align: center; opacity: 0.5; font-size: 0.875rem;">
-            Conteúdo do card aqui
-          </div>
-        </template>
+        <div style="padding: 1.5rem 0; text-align: center; opacity: 0.6; font-size: 0.875rem;">
+          Conteúdo customizado aqui
+        </div>
       </CardBase>
     </div>
 
     <h2>Uso básico</h2>
     <CodeBlock :code="basicCode" language="vue" />
 
-    <h2>Temas</h2>
+    <h2>Variações de tema</h2>
     <CodeBlock :code="temaCode" language="vue" />
 
     <h2>Props</h2>
@@ -150,39 +157,10 @@ const temaCode = `<!-- Tema escuro -->
 </template>
 
 <style scoped>
-.demo-controls {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-.control-label {
-  font-size: 0.8rem;
-  color: var(--color-text-muted);
-}
-.control-group {
-  display: flex;
-  gap: 0.35rem;
-}
-.control-btn {
-  padding: 0.3rem 0.75rem;
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  color: var(--color-text-muted);
-  font-size: 0.8rem;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-.control-btn.active {
-  background: rgba(37, 99, 235, 0.15);
-  border-color: rgba(37, 99, 235, 0.4);
-  color: var(--color-accent-2);
-}
-.table-wrap {
-  overflow-x: auto;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius);
-  margin-bottom: 1.5rem;
-}
+.demo-controls { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+.control-label { font-size: 0.8rem; color: var(--color-text-muted); }
+.control-group { display: flex; gap: 0.35rem; }
+.control-btn { padding: 0.3rem 0.75rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-text-muted); font-size: 0.8rem; cursor: pointer; transition: all 0.15s; }
+.control-btn.active { background: rgba(37, 99, 235, 0.15); border-color: rgba(37, 99, 235, 0.4); color: var(--color-accent-2); }
+.table-wrap { overflow-x: auto; border: 1px solid var(--color-border); border-radius: var(--radius); margin-bottom: 1.5rem; }
 </style>

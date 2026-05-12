@@ -1,54 +1,62 @@
 <script setup>
 import { ref } from 'vue'
-import { CardPolar } from 'nemesischart'
+import { CardPizza } from 'nemesischart'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable from '@/components/PropsTable.vue'
 
 const tema = ref('light')
 const direcao = ref('right')
-const mostrarLinhasGrade = ref(true)
+const cutout = ref('70%')
 
 const data = [
-  { rotulo: 'Marketing',  quantidade: 4200 },
-  { rotulo: 'Vendas',     quantidade: 3100 },
-  { rotulo: 'Suporte',    quantidade: 2450 },
-  { rotulo: 'Pesquisa',   quantidade: 1800 },
-  { rotulo: 'Operações',  quantidade: 1250 },
+  { rotulo: 'Desktop', quantidade: 4800 },
+  { rotulo: 'Mobile',  quantidade: 3200 },
+  { rotulo: 'Tablet',  quantidade: 1450 },
+  { rotulo: 'Outros',  quantidade: 320 },
 ]
 
 const props = [
-  { name: 'data', type: 'Array<{ rotulo, quantidade }>', default: 'amostra', description: 'Fatias polares.' },
-  { name: 'cores', type: 'Array<String>', default: 'paleta padrão', description: 'Cores das fatias.' },
-  { name: 'mostrarLinhasGrade', type: 'Boolean', default: 'true', description: 'Exibe as linhas radiais e angulares do grid.' },
-  { name: 'direcao', type: "'top' | 'bottom' | 'left' | 'right'", default: "'right'", description: 'Posição da tabela lateral em relação ao gráfico.' },
-  { name: 'mostrarCabecalho', type: 'Boolean', default: 'true', description: 'Exibe o cabeçalho (Categoria/Quantidade) da tabela.' },
+  { name: 'data', type: 'Array<{ rotulo, quantidade }>', default: 'amostra', description: 'Fatias do doughnut.' },
+  { name: 'cores', type: 'Array<String>', default: 'paleta padrão', description: 'Cores das fatias (em ordem).' },
+  { name: 'cutout', type: 'String | Number', default: "'70%'", description: 'Espessura do anel (0% = pizza, 80% = donut fino).' },
+  { name: 'direcao', type: "'left' | 'right' | 'top' | 'bottom'", default: "'right'", description: 'Posição da tabela lateral em relação ao gráfico.' },
+  { name: 'mostrarCabecalho', type: 'Boolean', default: 'true', description: 'Exibe o cabeçalho da tabela.' },
   { name: 'rotuloCategoria / rotuloQuantidade', type: 'String', default: "'Categoria' / 'Quantidade'", description: 'Títulos das colunas da tabela.' },
   { name: 'tema', type: "'light' | 'dark'", default: "'light'", description: 'Paleta base.' },
   { name: 'tipoValor / locale / moeda', type: 'String', default: 'numero / pt-BR / BRL', description: 'Formatação dos valores.' },
   { name: 'height', type: 'String | Number', default: '260', description: 'Altura do gráfico em px.' },
   { name: 'legenda / sublegenda / titulo / descricao', type: 'String', default: 'null', description: 'Cabeçalho do card.' },
-  { name: 'exportar / nomeArquivoExport', type: 'Boolean / String', default: "false / 'card-polar.png'", description: 'Exportação como PNG.' },
+  { name: 'exportar / nomeArquivoExport', type: 'Boolean / String', default: "false / 'card-pizza.png'", description: 'Exportação como PNG.' },
 ]
 
 const basicCode = `<script setup>
-import { CardPolar } from 'nemesischart'
+import { CardPizza } from 'nemesischart'
 
 const data = [
-  { rotulo: 'Marketing', quantidade: 4200 },
-  { rotulo: 'Vendas',    quantidade: 3100 },
-  { rotulo: 'Suporte',   quantidade: 2450 },
+  { rotulo: 'Desktop', quantidade: 4800 },
+  { rotulo: 'Mobile',  quantidade: 3200 },
+  { rotulo: 'Tablet',  quantidade: 1450 },
 ]
 <\/script>
 
 <template>
-  <CardPolar
-    legenda="Investimento"
-    titulo="R$ 9.7k"
-    tipoValor="moeda"
+  <CardPizza
+    legenda="Dispositivos"
+    titulo="9.770"
+    descricao="sessões"
+    tipoValor="numero"
+    cutout="70%"
     :data="data"
-    direcao="right"
   />
 </template>`
+
+const pizzaCheiaCode = `<!-- cutout=0 transforma o donut em pizza cheia -->
+<CardPizza
+  legenda="Mix"
+  cutout="0%"
+  direcao="bottom"
+  :data="data"
+/>`
 </script>
 
 <template>
@@ -56,10 +64,10 @@ const data = [
     <div class="page-badge">
       <span class="badge badge-purple">Componente</span>
     </div>
-    <h1>CardPolar</h1>
+    <h1>CardPizza</h1>
     <p>
-      Gráfico de área polar com tabela lateral opcional, ideal para comparar categorias em escala
-      radial — investimentos por área, distribuição de horas, performance multi-dimensional.
+      Doughnut (ou pizza cheia) com tabela lateral opcional. Use para participação percentual de
+      categorias — dispositivos, canais, fontes de tráfego, mix de produtos.
     </p>
 
     <h2>Demonstração</h2>
@@ -78,30 +86,32 @@ const data = [
         </div>
       </div>
       <div class="control-row">
-        <label class="control-label">Grid:</label>
+        <label class="control-label">Cutout:</label>
         <div class="control-group">
-          <button class="control-btn" :class="{ active: mostrarLinhasGrade }" @click="mostrarLinhasGrade = !mostrarLinhasGrade">{{ mostrarLinhasGrade ? 'visível' : 'oculto' }}</button>
+          <button v-for="c in ['0%','40%','70%','85%']" :key="c" class="control-btn" :class="{ active: cutout === c }" @click="cutout = c">{{ c }}</button>
         </div>
       </div>
     </div>
 
     <div class="demo-section" :class="{ 'demo-dark': tema === 'dark' }">
-      <CardPolar
+      <CardPizza
         :tema="tema"
-        legenda="Investimento por área"
-        sublegenda="2026"
-        titulo="R$ 12.8k"
-        descricao="total alocado"
-        tipoValor="moeda"
+        legenda="Dispositivos"
+        sublegenda="Últimos 30 dias"
+        titulo="9.770"
+        descricao="sessões"
         :data="data"
         :direcao="direcao"
-        :mostrarLinhasGrade="mostrarLinhasGrade"
+        :cutout="cutout"
         :botaoVisivel="true"
       />
     </div>
 
-    <h2>Uso básico</h2>
+    <h2>Uso básico (donut)</h2>
     <CodeBlock :code="basicCode" language="vue" />
+
+    <h2>Pizza cheia</h2>
+    <CodeBlock :code="pizzaCheiaCode" language="vue" />
 
     <h2>Props</h2>
     <PropsTable :props="props" />

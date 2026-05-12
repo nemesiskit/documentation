@@ -24,10 +24,10 @@ const packages = [
     name: 'NemesisChart',
     slug: 'nemesischart',
     description: 'Componentes de gráficos para Vue 3 com animações GSAP, temas dinâmicos e integração Chart.js.',
-    badge: 'v1.0.0',
+    badge: 'v2.0.5',
     badgeType: 'purple',
     status: 'Estável',
-    components: 8,
+    components: 7,
     icon: `<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>`,
     to: '/nemesischart/introducao'
   },

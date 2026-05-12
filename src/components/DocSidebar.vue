@@ -19,13 +19,12 @@ const allGroups = {
       label: 'Componentes',
       items: [
         { label: 'CardBase', to: '/nemesischart/card-base' },
-        { label: 'CardColuna', to: '/nemesischart/card-coluna' },
-        { label: 'CardBarra', to: '/nemesischart/card-barra' },
         { label: 'CardLinhas', to: '/nemesischart/card-linhas' },
-        { label: 'CardRosquinha', to: '/nemesischart/card-rosquinha' },
-        { label: 'CardSemiCirculo', to: '/nemesischart/card-semi-circulo' },
+        { label: 'CardBarra', to: '/nemesischart/card-barra' },
+        { label: 'CardPizza', to: '/nemesischart/card-pizza' },
         { label: 'CardPolar', to: '/nemesischart/card-polar' },
         { label: 'CardProgresso', to: '/nemesischart/card-progresso' },
+        { label: 'ChartBase', to: '/nemesischart/chart-base' },
       ]
     },
     {
