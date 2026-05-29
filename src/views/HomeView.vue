@@ -24,7 +24,7 @@ const packages = [
     name: 'NemesisChart',
     slug: 'nemesischart',
     description: 'Componentes de gráficos para Vue 3 com animações GSAP, temas dinâmicos e integração Chart.js.',
-    badge: 'v2.0.5',
+    badge: 'v2.0.9',
     badgeType: 'purple',
     status: 'Estável',
     components: 7,
