@@ -70,6 +70,19 @@ const barCode = `<ChartBase
     datasets: [{ label: 'Vendas', data: [10, 25, 18], backgroundColor: '#10B981' }]
   }"
 />`
+
+const doughnutCode = `<ChartBase
+  type="doughnut"
+  :height="240"
+  :data="{
+    labels: ['Desktop', 'Mobile', 'Tablet'],
+    datasets: [{
+      data: [55, 35, 10],
+      backgroundColor: ['#3B82F6', '#8B5CF6', '#10B981'],
+    }]
+  }"
+  :options="{ cutout: '65%', plugins: { legend: { position: 'bottom' } } }"
+/>`
 </script>
 
 <template>
@@ -96,6 +109,10 @@ const barCode = `<ChartBase
 
     <h2>Barras</h2>
     <CodeBlock :code="barCode" language="vue" />
+
+    <h2>Doughnut</h2>
+    <p>Qualquer tipo nativo do Chart.js funciona — basta informar <code>type</code> e o <code>data</code> correspondente:</p>
+    <CodeBlock :code="doughnutCode" language="vue" />
 
     <h2>Props</h2>
     <PropsTable :props="props" />

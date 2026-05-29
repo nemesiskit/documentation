@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { CardProgresso } from 'nemesischart'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable from '@/components/PropsTable.vue'
+import RefTable from '@/components/RefTable.vue'
 
 const tema = ref('light')
 const formato = ref('linear')
@@ -28,10 +29,28 @@ const props = [
   { name: 'corDetalhes', type: 'String', default: "'#3B82F6'", description: 'Cor do gráfico circular em modo crescimento.' },
   { name: 'corExcesso', type: 'String', default: "'#EF4444'", description: 'Cor de alerta para itens em modo redução.' },
   { name: 'cores', type: 'Array<String>', default: 'paleta padrão', description: 'Cores automáticas dos itens.' },
+  { name: 'height', type: 'String | Number', default: '220', description: 'Altura do gráfico (modo circular) em px.' },
   { name: 'tema', type: "'light' | 'dark'", default: "'light'", description: 'Paleta base.' },
   { name: 'tipoValor / locale / moeda', type: 'String', default: 'numero / pt-BR / BRL', description: 'Formatação dos valores.' },
   { name: 'legenda / sublegenda / titulo / descricao', type: 'String', default: 'null', description: 'Cabeçalho do card.' },
+  { name: 'botaoVisivel / textoBotao', type: 'Boolean / String', default: "false / 'Ver mais'", description: 'Botão de ação no topo direito.' },
+  { name: 'corFundo / corTexto / corBorda', type: 'String', default: '—', description: 'Overrides do tema.' },
+  { name: 'borderRadius / sombra', type: 'String | Number', default: '—', description: 'Customização do card.' },
   { name: 'exportar / nomeArquivoExport', type: 'Boolean / String', default: "false / 'card-progresso.png'", description: 'Exportação como PNG.' },
+]
+
+const events = [
+  { name: '@botaoAcao', description: 'Emitido ao clicar no botão "Ver mais".' },
+  { name: '@exportado', description: 'Emitido após o PNG ser gerado e baixado.' },
+]
+
+const slots = [
+  { name: '#legenda', description: 'Substitui a legenda (texto superior).' },
+  { name: '#sublegenda', description: 'Substitui a sublegenda.' },
+  { name: '#titulo', description: 'Substitui o valor de destaque.' },
+  { name: '#descricao', description: 'Substitui a descrição do título.' },
+  { name: '#actions', description: 'Área superior direita do card (substitui o botão padrão).' },
+  { name: '#footer', description: 'Conteúdo extra abaixo das barras/gráfico.' },
 ]
 
 const itemFields = [
@@ -148,6 +167,12 @@ const circularCode = `<CardProgresso
 
     <h2>Props</h2>
     <PropsTable :props="props" />
+
+    <h2>Eventos</h2>
+    <RefTable :columns="['Evento', 'Descrição']" :rows="events" />
+
+    <h2>Slots</h2>
+    <RefTable :columns="['Slot', 'Descrição']" :rows="slots" />
   </div>
 </template>
 

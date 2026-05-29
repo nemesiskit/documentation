@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { CardBase } from 'nemesischart'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable from '@/components/PropsTable.vue'
+import RefTable from '@/components/RefTable.vue'
 
 const tema = ref('light')
 
@@ -119,40 +120,10 @@ const temaCode = `<!-- Tema escuro -->
     <PropsTable :props="props" />
 
     <h2>Eventos</h2>
-    <div class="table-wrap">
-      <table class="props-table">
-        <thead>
-          <tr>
-            <th>Evento</th>
-            <th>Descrição</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="ev in events" :key="ev.name">
-            <td><span class="prop-name">{{ ev.name }}</span></td>
-            <td>{{ ev.description }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <RefTable :columns="['Evento', 'Descrição']" :rows="events" />
 
     <h2>Slots</h2>
-    <div class="table-wrap">
-      <table class="props-table">
-        <thead>
-          <tr>
-            <th>Slot</th>
-            <th>Descrição</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="sl in slots" :key="sl.name">
-            <td><span class="prop-name">{{ sl.name }}</span></td>
-            <td>{{ sl.description }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <RefTable :columns="['Slot', 'Descrição']" :rows="slots" />
   </div>
 </template>
 
@@ -162,5 +133,4 @@ const temaCode = `<!-- Tema escuro -->
 .control-group { display: flex; gap: 0.35rem; }
 .control-btn { padding: 0.3rem 0.75rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-text-muted); font-size: 0.8rem; cursor: pointer; transition: all 0.15s; }
 .control-btn.active { background: rgba(37, 99, 235, 0.15); border-color: rgba(37, 99, 235, 0.4); color: var(--color-accent-2); }
-.table-wrap { overflow-x: auto; border: 1px solid var(--color-border); border-radius: var(--radius); margin-bottom: 1.5rem; }
 </style>

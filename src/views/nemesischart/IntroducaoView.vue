@@ -72,6 +72,11 @@ const features = [
     desc: 'Composables expostos: useTema, useFormatadorValor, useTooltipExterno, useExportarImagem.',
     icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`
   },
+  {
+    title: 'Cards interativos',
+    desc: 'CardPizza e CardPolar emitem @itemClicado ao clicar nas fatias quando itensClicaveis está ativo.',
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11.5V5.5a1.5 1.5 0 0 1 3 0v5"/><path d="M12 10V4.5a1.5 1.5 0 0 1 3 0V10"/><path d="M15 9.5a1.5 1.5 0 0 1 3 0V14a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-2.7L3.5 14a1.5 1.5 0 0 1 2.5-1.6L8 14"/></svg>`
+  },
 ]
 
 const components = [
@@ -89,7 +94,7 @@ const components = [
   <div class="doc-content">
     <div class="page-badge">
       <span class="badge badge-purple">NemesisChart</span>
-      <span class="badge badge-green">v2.0.5</span>
+      <span class="badge badge-green">v2.0.9</span>
     </div>
 
     <h1>Introdução</h1>

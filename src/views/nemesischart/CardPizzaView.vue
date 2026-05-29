@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { CardPizza } from 'nemesischart'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable from '@/components/PropsTable.vue'
+import RefTable from '@/components/RefTable.vue'
 
 const tema = ref('light')
 const direcao = ref('right')
@@ -22,11 +23,30 @@ const props = [
   { name: 'direcao', type: "'left' | 'right' | 'top' | 'bottom'", default: "'right'", description: 'Posição da tabela lateral em relação ao gráfico.' },
   { name: 'mostrarCabecalho', type: 'Boolean', default: 'true', description: 'Exibe o cabeçalho da tabela.' },
   { name: 'rotuloCategoria / rotuloQuantidade', type: 'String', default: "'Categoria' / 'Quantidade'", description: 'Títulos das colunas da tabela.' },
+  { name: 'itensClicaveis', type: 'Boolean', default: 'false', description: 'Torna as fatias/linhas da tabela clicáveis e emite @itemClicado.' },
   { name: 'tema', type: "'light' | 'dark'", default: "'light'", description: 'Paleta base.' },
   { name: 'tipoValor / locale / moeda', type: 'String', default: 'numero / pt-BR / BRL', description: 'Formatação dos valores.' },
   { name: 'height', type: 'String | Number', default: '260', description: 'Altura do gráfico em px.' },
   { name: 'legenda / sublegenda / titulo / descricao', type: 'String', default: 'null', description: 'Cabeçalho do card.' },
+  { name: 'botaoVisivel / textoBotao', type: 'Boolean / String', default: "false / 'Ver mais'", description: 'Botão de ação no topo direito.' },
+  { name: 'corFundo / corTexto / corBorda', type: 'String', default: '—', description: 'Overrides do tema.' },
+  { name: 'borderRadius / sombra', type: 'String | Number', default: '—', description: 'Customização do card.' },
   { name: 'exportar / nomeArquivoExport', type: 'Boolean / String', default: "false / 'card-pizza.png'", description: 'Exportação como PNG.' },
+]
+
+const events = [
+  { name: '@botaoAcao', description: 'Emitido ao clicar no botão "Ver mais".' },
+  { name: '@exportado', description: 'Emitido após o PNG ser gerado e baixado.' },
+  { name: '@itemClicado', description: 'Emitido ao clicar numa fatia/linha quando itensClicaveis está ativo. Recebe o item ({ rotulo, quantidade, ... }).' },
+]
+
+const slots = [
+  { name: '#legenda', description: 'Substitui a legenda (texto superior).' },
+  { name: '#sublegenda', description: 'Substitui a sublegenda.' },
+  { name: '#titulo', description: 'Substitui o valor de destaque.' },
+  { name: '#descricao', description: 'Substitui a descrição do título.' },
+  { name: '#actions', description: 'Área superior direita do card (substitui o botão padrão).' },
+  { name: '#footer', description: 'Conteúdo extra abaixo do gráfico.' },
 ]
 
 const basicCode = `<script setup>
@@ -57,6 +77,24 @@ const pizzaCheiaCode = `<!-- cutout=0 transforma o donut em pizza cheia -->
   direcao="bottom"
   :data="data"
 />`
+
+const clicavelCode = `<script setup>
+import { CardPizza } from 'nemesischart'
+
+function aoClicar(item) {
+  // item = { rotulo: 'Mobile', quantidade: 3200 }
+  console.log('Categoria selecionada:', item.rotulo)
+}
+<\/script>
+
+<template>
+  <CardPizza
+    legenda="Dispositivos"
+    :data="data"
+    :itensClicaveis="true"
+    @itemClicado="aoClicar"
+  />
+</template>`
 </script>
 
 <template>
@@ -113,8 +151,18 @@ const pizzaCheiaCode = `<!-- cutout=0 transforma o donut em pizza cheia -->
     <h2>Pizza cheia</h2>
     <CodeBlock :code="pizzaCheiaCode" language="vue" />
 
+    <h2>Itens clicáveis</h2>
+    <p>Com <code>itensClicaveis</code>, cada fatia (e a linha correspondente na tabela) dispara <code>@itemClicado</code> com o item selecionado:</p>
+    <CodeBlock :code="clicavelCode" language="vue" />
+
     <h2>Props</h2>
     <PropsTable :props="props" />
+
+    <h2>Eventos</h2>
+    <RefTable :columns="['Evento', 'Descrição']" :rows="events" />
+
+    <h2>Slots</h2>
+    <RefTable :columns="['Slot', 'Descrição']" :rows="slots" />
   </div>
 </template>
 

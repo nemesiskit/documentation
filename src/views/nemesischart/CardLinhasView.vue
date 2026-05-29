@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { CardLinhas } from 'nemesischart'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable from '@/components/PropsTable.vue'
+import RefTable from '@/components/RefTable.vue'
 
 const tema = ref('light')
 const tipoValor = ref('moeda')
@@ -37,6 +38,20 @@ const props = [
   { name: 'borderRadius / sombra', type: 'String | Number', default: '—', description: 'Customização do card.' },
 ]
 
+const events = [
+  { name: '@botaoAcao', description: 'Emitido ao clicar no botão "Ver mais" (quando botaoVisivel está ativo).' },
+  { name: '@exportado', description: 'Emitido após o PNG ser gerado e baixado (quando exportar está ativo).' },
+]
+
+const slots = [
+  { name: '#legenda', description: 'Substitui a legenda (texto superior).' },
+  { name: '#sublegenda', description: 'Substitui a sublegenda.' },
+  { name: '#titulo', description: 'Substitui o valor de destaque.' },
+  { name: '#descricao', description: 'Substitui a descrição do título.' },
+  { name: '#actions', description: 'Área superior direita do card (substitui o botão padrão).' },
+  { name: '#footer', description: 'Conteúdo extra abaixo do gráfico.' },
+]
+
 const basicCode = `<script setup>
 import { CardLinhas } from 'nemesischart'
 
@@ -65,6 +80,19 @@ const referenciaCode = `<CardLinhas
   :data="data"
   :linhasReferencia="{ valor: 3000, rotulo: 'Meta', cor: '#10B981' }"
 />`
+
+const slotCode = `<CardLinhas legenda="Receita" :data="data" exportar>
+  <!-- título customizado com markup -->
+  <template #titulo>
+    <span style="color: #10B981">R$ 22.9k</span>
+    <small style="font-size: 0.7rem"> ▲ 12%</small>
+  </template>
+
+  <!-- rodapé customizado -->
+  <template #footer>
+    <small>Atualizado há 5 minutos.</small>
+  </template>
+</CardLinhas>`
 </script>
 
 <template>
@@ -121,8 +149,18 @@ const referenciaCode = `<CardLinhas
     <p>Defina uma ou várias linhas horizontais sobre o gráfico (ex.: meta, média):</p>
     <CodeBlock :code="referenciaCode" language="vue" />
 
+    <h2>Customização com slots</h2>
+    <p>Use os slots de cabeçalho para inserir markup rico no lugar das props de texto:</p>
+    <CodeBlock :code="slotCode" language="vue" />
+
     <h2>Props</h2>
     <PropsTable :props="props" />
+
+    <h2>Eventos</h2>
+    <RefTable :columns="['Evento', 'Descrição']" :rows="events" />
+
+    <h2>Slots</h2>
+    <RefTable :columns="['Slot', 'Descrição']" :rows="slots" />
   </div>
 </template>
 

@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { CardBarra } from 'nemesischart'
 import CodeBlock from '@/components/CodeBlock.vue'
 import PropsTable from '@/components/PropsTable.vue'
+import RefTable from '@/components/RefTable.vue'
 
 const tema = ref('light')
 const orientacao = ref('vertical')
@@ -42,6 +43,20 @@ const props = [
   { name: 'height', type: 'String | Number', default: '280', description: 'Altura do gráfico em px.' },
   { name: 'legenda / sublegenda / titulo / descricao', type: 'String', default: 'null', description: 'Cabeçalho do card.' },
   { name: 'exportar / nomeArquivoExport', type: 'Boolean / String', default: "false / 'card-barra.png'", description: 'Exportação como PNG.' },
+]
+
+const events = [
+  { name: '@botaoAcao', description: 'Emitido ao clicar no botão "Ver mais" (quando botaoVisivel está ativo).' },
+  { name: '@exportado', description: 'Emitido após o PNG ser gerado e baixado (quando exportar está ativo).' },
+]
+
+const slots = [
+  { name: '#legenda', description: 'Substitui a legenda (texto superior).' },
+  { name: '#sublegenda', description: 'Substitui a sublegenda.' },
+  { name: '#titulo', description: 'Substitui o valor de destaque.' },
+  { name: '#descricao', description: 'Substitui a descrição do título.' },
+  { name: '#actions', description: 'Área superior direita do card (substitui o botão padrão).' },
+  { name: '#footer', description: 'Conteúdo extra abaixo do gráfico.' },
 ]
 
 const simpleCode = `<script setup>
@@ -153,6 +168,12 @@ const data = [
 
     <h2>Props</h2>
     <PropsTable :props="props" />
+
+    <h2>Eventos</h2>
+    <RefTable :columns="['Evento', 'Descrição']" :rows="events" />
+
+    <h2>Slots</h2>
+    <RefTable :columns="['Slot', 'Descrição']" :rows="slots" />
   </div>
 </template>
 
