@@ -1,78 +1,29 @@
 <script setup>
-import { RouterLink, useRoute } from 'vue-router'
 import { computed } from 'vue'
+import { RouterLink, useRoute } from 'vue-router'
+import { sectionForPath } from '@/docsNav.js'
 
 defineProps({ open: Boolean })
 
 const route = useRoute()
-
-const allGroups = {
-  nemesischart: [
-    {
-      label: 'NemesisChart',
-      items: [
-        { label: 'Introdução', to: '/nemesischart/introducao' },
-        { label: 'Instalação', to: '/nemesischart/instalacao' },
-      ]
-    },
-    {
-      label: 'Componentes',
-      items: [
-        { label: 'CardBase', to: '/nemesischart/card-base' },
-        { label: 'CardLinhas', to: '/nemesischart/card-linhas' },
-        { label: 'CardBarra', to: '/nemesischart/card-barra' },
-        { label: 'CardPizza', to: '/nemesischart/card-pizza' },
-        { label: 'CardPolar', to: '/nemesischart/card-polar' },
-        { label: 'CardProgresso', to: '/nemesischart/card-progresso' },
-        { label: 'ChartBase', to: '/nemesischart/chart-base' },
-      ]
-    },
-    {
-      label: 'Guias',
-      items: [
-        { label: 'Temas', to: '/nemesischart/temas' },
-        { label: 'Paleta de Cores', to: '/nemesischart/cores' },
-      ]
-    },
-  ],
-  nemesiselements: [
-    {
-      label: 'NemesisElements',
-      items: [
-        { label: 'Introdução', to: '/nemesiselements/introducao' },
-        { label: 'Instalação', to: '/nemesiselements/instalacao' },
-      ]
-    },
-    {
-      label: 'Componentes',
-      items: [
-        { label: 'ToastNotificacao', to: '/nemesiselements/toast-notificacao' },
-        { label: 'TooltipElemento', to: '/nemesiselements/tooltip-elemento' },
-      ]
-    },
-  ],
-}
-
-const navGroups = computed(() => {
-  if (route.path.startsWith('/nemesiselements')) return allGroups.nemesiselements
-  return allGroups.nemesischart
-})
+const section = computed(() => sectionForPath(route.path))
 </script>
 
 <template>
   <aside class="sidebar" :class="{ open }">
     <div class="sidebar-inner">
-      <div class="sidebar-section">
+      <div class="sidebar-head">
         <RouterLink to="/" class="back-link">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <polyline points="15 18 9 12 15 6" />
           </svg>
           Início
         </RouterLink>
+        <span class="sidebar-version">{{ section.label }} · {{ section.version }}</span>
       </div>
 
       <nav class="sidebar-nav">
-        <div v-for="group in navGroups" :key="group.label" class="nav-group">
+        <div v-for="group in section.groups" :key="group.label" class="nav-group">
           <div class="nav-group-label">{{ group.label }}</div>
           <RouterLink
             v-for="item in group.items"
@@ -81,6 +32,7 @@ const navGroups = computed(() => {
             class="nav-item"
             :class="{ active: route.path === item.to }"
           >
+            <span class="nav-icon" v-html="item.icon"></span>
             {{ item.label }}
           </RouterLink>
         </div>
@@ -109,14 +61,16 @@ const navGroups = computed(() => {
 }
 
 .sidebar-inner {
-  padding: 1.5rem 0.75rem;
+  padding: 1.5rem 1rem;
 }
 
-.sidebar-section {
+.sidebar-head {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
   margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
+  padding: 0 0.5rem 1rem;
   border-bottom: 1px solid var(--color-border);
-  padding-left: 0.5rem;
 }
 
 .back-link {
@@ -129,11 +83,17 @@ const navGroups = computed(() => {
 }
 
 .back-link:hover {
-  color: var(--color-text);
+  color: var(--color-heading);
+}
+
+.sidebar-version {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  color: var(--color-text-subtle);
 }
 
 .nav-group {
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.6rem;
 }
 
 .nav-group-label {
@@ -141,29 +101,47 @@ const navGroups = computed(() => {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--color-text-muted);
+  color: var(--color-text-subtle);
   padding: 0 0.75rem;
   margin-bottom: 0.4rem;
 }
 
 .nav-item {
-  display: block;
-  padding: 0.45rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.42rem 0.75rem;
   border-radius: var(--radius-sm);
-  font-size: 0.875rem;
+  border: 1px solid transparent;
+  font-size: 0.865rem;
   color: var(--color-text-muted);
   transition: all 0.15s;
   cursor: pointer;
 }
 
+.nav-icon {
+  display: flex;
+  color: var(--color-text-subtle);
+  transition: color 0.15s;
+}
+
 .nav-item:hover {
-  background: var(--color-surface-2);
-  color: var(--color-text);
+  background: var(--color-surface);
+  color: var(--color-heading);
+}
+
+.nav-item:hover .nav-icon {
+  color: var(--color-text-muted);
 }
 
 .nav-item.active {
-  background: rgba(37, 99, 235, 0.12);
-  color: var(--color-accent-2);
+  background: var(--color-surface-2);
+  border-color: var(--color-border);
+  color: var(--color-heading);
   font-weight: 500;
+}
+
+.nav-item.active .nav-icon {
+  color: var(--color-accent-2);
 }
 </style>

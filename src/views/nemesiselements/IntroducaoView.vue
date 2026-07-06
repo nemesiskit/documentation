@@ -83,7 +83,7 @@ const components = [
 
     <h1>Introdução</h1>
     <p>
-      <strong style="color: #fff">NemesisElements</strong> é uma biblioteca de componentes de interface para Vue 3
+      <strong>NemesisElements</strong> é uma biblioteca de componentes de interface para Vue 3
       focada em feedback ao usuário. Construída com Composition API, oferece componentes prontos para produção
       com animações, temas e uma API simples via composables.
     </p>

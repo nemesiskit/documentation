@@ -19,20 +19,26 @@ const dataSimples = [
   { rotulo: 'Jun', quantidade: 88 },
 ]
 
+const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun']
+function serie(valores) {
+  return valores.map((quantidade, i) => ({ rotulo: meses[i], quantidade }))
+}
+
 const series = [
-  { nome: 'Receita',    data: [40, 60, 55, 80, 70, 90] },
-  { nome: 'Despesa',    data: [25, 35, 40, 55, 50, 65] },
-  { nome: 'Lucro',      data: [15, 25, 15, 25, 20, 25] },
+  { nome: 'Receita', dados: serie([40, 60, 55, 80, 70, 90]) },
+  { nome: 'Despesa', dados: serie([25, 35, 40, 55, 50, 65]) },
+  { nome: 'Lucro',   dados: serie([15, 25, 15, 25, 20, 25]) },
 ]
 
 const props = [
-  { name: 'data', type: 'Array<{ rotulo, quantidade }>', default: 'amostra', description: 'Dados em série simples.' },
-  { name: 'series', type: 'Array<{ nome, data, cor? }>', default: 'null', description: 'Múltiplas séries (sobrescreve data).' },
+  { name: 'data', type: 'Array<{ rotulo, quantidade }>', default: 'amostra', description: 'Dados em série única.' },
+  { name: 'series', type: 'Array<{ nome, dados, cor? }>', default: 'null', description: 'Múltiplas séries (têm prioridade sobre data). Cada dados é um array de { rotulo, quantidade }; os rótulos do eixo vêm da primeira série.' },
   { name: 'orientacao', type: "'vertical' | 'horizontal'", default: "'vertical'", description: 'Direção das barras.' },
   { name: 'empilhado', type: 'Boolean', default: 'false', description: 'Empilha as séries em vez de agrupá-las lado a lado.' },
-  { name: 'corDetalhes', type: 'String', default: "'#3B82F6'", description: 'Cor primária quando há apenas uma série.' },
-  { name: 'cores', type: 'Array<String>', default: 'paleta padrão', description: 'Cores aplicadas em ordem nas séries.' },
+  { name: 'corDetalhes', type: 'String', default: "'#3B82F6'", description: 'Cor das barras quando há apenas uma série.' },
+  { name: 'cores', type: 'Array<String>', default: 'paleta padrão', description: 'Cores aplicadas em ordem às séries (cada série pode sobrescrever com cor).' },
   { name: 'corHover', type: 'String', default: 'null', description: 'Cor da barra ao passar o mouse.' },
+  { name: 'detalheTooltip', type: '(item, index) => String | String[]', default: 'null', description: 'Texto(s) extra(s) exibidos no tooltip abaixo dos valores. Recebe o item da primeira série.' },
   { name: 'mostrarLegendaSeries', type: 'Boolean', default: 'true', description: 'Exibe a legenda quando há múltiplas séries.' },
   { name: 'larguraBarra', type: 'String | Number', default: '0.92', description: 'Percentual de largura da barra (Chart.js barPercentage).' },
   { name: 'raioBarra', type: 'Number', default: '6', description: 'Raio da borda das barras em px.' },
@@ -82,15 +88,26 @@ const data = [
 const seriesCode = `<script setup>
 import { CardBarra } from 'nemesischart'
 
+// Cada série tem nome, dados e, opcionalmente, cor.
+// Os rótulos do eixo vêm da primeira série.
 const series = [
-  { nome: 'Receita', data: [40, 60, 55, 80, 70, 90] },
-  { nome: 'Despesa', data: [25, 35, 40, 55, 50, 65] },
-  { nome: 'Lucro',   data: [15, 25, 15, 25, 20, 25] },
-]
-
-const data = [
-  { rotulo: 'Jan' }, { rotulo: 'Fev' }, { rotulo: 'Mar' },
-  { rotulo: 'Abr' }, { rotulo: 'Mai' }, { rotulo: 'Jun' },
+  {
+    nome: 'Receita',
+    dados: [
+      { rotulo: 'Jan', quantidade: 40 },
+      { rotulo: 'Fev', quantidade: 60 },
+      { rotulo: 'Mar', quantidade: 55 },
+    ],
+  },
+  {
+    nome: 'Despesa',
+    cor: '#EF4444',
+    dados: [
+      { rotulo: 'Jan', quantidade: 25 },
+      { rotulo: 'Fev', quantidade: 35 },
+      { rotulo: 'Mar', quantidade: 40 },
+    ],
+  },
 ]
 <\/script>
 
@@ -98,11 +115,19 @@ const data = [
   <CardBarra
     legenda="Resultado"
     titulo="Comparativo"
-    :data="data"
     :series="series"
     :empilhado="false"
   />
 </template>`
+
+const tooltipCode = `<CardBarra
+  legenda="Vendas"
+  :data="[
+    { rotulo: 'Jan', quantidade: 42, vendedores: 5 },
+    { rotulo: 'Fev', quantidade: 78, vendedores: 7 },
+  ]"
+  :detalheTooltip="(item) => \`\${item.vendedores} vendedores ativos\`"
+/>`
 </script>
 
 <template>
@@ -111,9 +136,10 @@ const data = [
       <span class="badge badge-purple">Componente</span>
     </div>
     <h1>CardBarra</h1>
-    <p>
-      Barras verticais ou horizontais, com suporte a séries múltiplas e empilhamento. Use
-      <code>data</code> para uma única série ou <code>series</code> para comparar várias.
+    <p class="doc-lead">
+      Para comparar quantidades entre categorias ou períodos — vendas por mês, resultado por área —
+      o <code>CardBarra</code> desenha barras verticais ou horizontais, agrupadas ou empilhadas,
+      com uma ou várias séries.
     </p>
 
     <h2>Demonstração</h2>
@@ -132,12 +158,6 @@ const data = [
         </div>
       </div>
       <div class="control-row">
-        <label class="control-label">Empilhado:</label>
-        <div class="control-group">
-          <button class="control-btn" :class="{ active: empilhado }" @click="empilhado = !empilhado">{{ empilhado ? 'sim' : 'não' }}</button>
-        </div>
-      </div>
-      <div class="control-row">
         <label class="control-label">Cor:</label>
         <input type="color" v-model="corDetalhes" class="color-input" />
         <span class="color-value">{{ corDetalhes }}</span>
@@ -146,6 +166,7 @@ const data = [
 
     <div class="demo-section" :class="{ 'demo-dark': tema === 'dark' }">
       <CardBarra
+        :key="orientacao"
         :tema="tema"
         legenda="Vendas Mensais"
         sublegenda="Jan — Jun 2026"
@@ -154,17 +175,47 @@ const data = [
         :corDetalhes="corDetalhes"
         :data="dataSimples"
         :orientacao="orientacao"
-        :empilhado="empilhado"
         :botaoVisivel="true"
       />
     </div>
 
-    <h2>Série simples</h2>
+    <h2>Comparando uma única série</h2>
     <CodeBlock :code="simpleCode" language="vue" />
 
-    <h2>Múltiplas séries</h2>
-    <p>Passe a prop <code>series</code> para comparar várias séries no mesmo gráfico. Combine com <code>empilhado</code> para mostrar acumulado.</p>
+    <h2>Comparando várias séries</h2>
+    <p>
+      Passe a prop <code>series</code> para desenhar várias séries no mesmo gráfico. Cada série
+      carrega os próprios dados no formato <code>{ rotulo, quantidade }</code>, e os rótulos do
+      eixo vêm da primeira. Ative <code>empilhado</code> para mostrar o acumulado:
+    </p>
+
+    <div class="demo-controls">
+      <div class="control-row">
+        <label class="control-label">Empilhado:</label>
+        <div class="control-group">
+          <button class="control-btn" :class="{ active: empilhado }" @click="empilhado = !empilhado">{{ empilhado ? 'sim' : 'não' }}</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="demo-section">
+      <CardBarra
+        legenda="Resultado"
+        sublegenda="Jan — Jun 2026"
+        titulo="Comparativo"
+        :series="series"
+        :empilhado="empilhado"
+      />
+    </div>
+
     <CodeBlock :code="seriesCode" language="vue" />
+
+    <h2>Adicionando contexto ao tooltip</h2>
+    <p>
+      A prop <code>detalheTooltip</code> recebe o item original da primeira série — incluindo
+      campos extras — e devolve linhas adicionais para o tooltip:
+    </p>
+    <CodeBlock :code="tooltipCode" language="vue" />
 
     <h2>Props</h2>
     <PropsTable :props="props" />
@@ -183,7 +234,7 @@ const data = [
 .control-label { font-size: 0.8rem; color: var(--color-text-muted); min-width: 90px; }
 .control-group { display: flex; gap: 0.35rem; }
 .control-btn { padding: 0.3rem 0.75rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-text-muted); font-size: 0.8rem; cursor: pointer; transition: all 0.15s; }
-.control-btn.active { background: rgba(124,111,205,0.15); border-color: rgba(124,111,205,0.4); color: var(--color-accent-2); }
+.control-btn.active { background: var(--color-accent-soft); border-color: var(--color-accent-border); color: var(--color-accent-2); }
 .color-input { width: 32px; height: 28px; border: 1px solid var(--color-border); border-radius: 4px; cursor: pointer; background: transparent; }
 .color-value { font-size: 0.8rem; font-family: var(--font-mono); color: var(--color-text-muted); }
 </style>

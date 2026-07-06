@@ -26,9 +26,8 @@ const props = [
   { name: 'alturaBarra', type: 'String | Number', default: '8', description: 'Altura das barras lineares em px.' },
   { name: 'raioBarra', type: 'String | Number', default: "'999px'", description: 'Border-radius das barras.' },
   { name: 'cutout', type: 'String | Number', default: "'78%'", description: 'Espessura do anel no modo circular.' },
-  { name: 'corDetalhes', type: 'String', default: "'#3B82F6'", description: 'Cor do gráfico circular em modo crescimento.' },
+  { name: 'corDetalhes', type: 'String', default: "'#3B82F6'", description: 'Cor do gráfico circular em modo crescimento e base da paleta automática dos itens.' },
   { name: 'corExcesso', type: 'String', default: "'#EF4444'", description: 'Cor de alerta para itens em modo redução.' },
-  { name: 'cores', type: 'Array<String>', default: 'paleta padrão', description: 'Cores automáticas dos itens.' },
   { name: 'height', type: 'String | Number', default: '220', description: 'Altura do gráfico (modo circular) em px.' },
   { name: 'tema', type: "'light' | 'dark'", default: "'light'", description: 'Paleta base.' },
   { name: 'tipoValor / locale / moeda', type: 'String', default: 'numero / pt-BR / BRL', description: 'Formatação dos valores.' },
@@ -97,9 +96,11 @@ const circularCode = `<CardProgresso
       <span class="badge badge-purple">Componente</span>
     </div>
     <h1>CardProgresso</h1>
-    <p>
-      Barras de progresso lineares ou circulares com suporte a metas de
-      <strong>crescimento</strong> e de <strong>redução</strong> por item.
+    <p class="doc-lead">
+      Para acompanhar o avanço em direção a metas — vendas do trimestre, redução de reclamações —
+      o <code>CardProgresso</code> exibe barras lineares ou um anel circular, com suporte a metas
+      de <strong>crescimento</strong> e de <strong>redução</strong> por item. As cores dos itens
+      são derivadas de <code>corDetalhes</code>, e cada item pode fixar a própria <code>cor</code>.
     </p>
 
     <h2>Demonstração</h2>
@@ -138,10 +139,14 @@ const circularCode = `<CardProgresso
       />
     </div>
 
-    <h2>Modo linear</h2>
+    <h2>Acompanhando metas com barras lineares</h2>
     <CodeBlock :code="basicCode" language="vue" />
 
-    <h2>Modo circular</h2>
+    <h2>Resumindo o progresso em um anel circular</h2>
+    <p>
+      No formato circular, o anel mostra a média de progresso de todos os itens, e a lista
+      detalhada fica ao lado (controlável com <code>direcao</code>):
+    </p>
     <CodeBlock :code="circularCode" language="vue" />
 
     <h2>Estrutura do <code>data</code></h2>
@@ -182,7 +187,7 @@ const circularCode = `<CardProgresso
 .control-label { font-size: 0.8rem; color: var(--color-text-muted); min-width: 70px; }
 .control-group { display: flex; gap: 0.35rem; }
 .control-btn { padding: 0.3rem 0.75rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-text-muted); font-size: 0.8rem; cursor: pointer; transition: all 0.15s; }
-.control-btn.active { background: rgba(124,111,205,0.15); border-color: rgba(124,111,205,0.4); color: var(--color-accent-2); }
+.control-btn.active { background: var(--color-accent-soft); border-color: var(--color-accent-border); color: var(--color-accent-2); }
 .color-input { width: 32px; height: 28px; border: 1px solid var(--color-border); border-radius: 4px; cursor: pointer; background: transparent; }
 .color-value { font-size: 0.8rem; font-family: var(--font-mono); color: var(--color-text-muted); }
 .table-wrap { overflow-x: auto; border: 1px solid var(--color-border); border-radius: var(--radius); margin-bottom: 1.5rem; }

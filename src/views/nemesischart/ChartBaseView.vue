@@ -71,6 +71,22 @@ const barCode = `<ChartBase
   }"
 />`
 
+const refCode = `<script setup>
+import { ref, onMounted } from 'vue'
+import { ChartBase } from 'nemesischart'
+
+const grafico = ref(null)
+
+onMounted(() => {
+  // instância nativa do Chart.js
+  console.log(grafico.value.chart.data)
+})
+<\/script>
+
+<template>
+  <ChartBase ref="grafico" type="line" :data="chartData" />
+</template>`
+
 const doughnutCode = `<ChartBase
   type="doughnut"
   :height="240"
@@ -91,11 +107,11 @@ const doughnutCode = `<ChartBase
       <span class="badge badge-purple">Componente</span>
     </div>
     <h1>ChartBase</h1>
-    <p>
-      Wrapper fino sobre <strong style="color: var(--color-text)">Chart.js</strong> que cuida do
-      registro dos controllers/scales mais usados, do ciclo de vida (criar/atualizar/destruir) e
-      aplica defaults responsivos. Use quando precisar de um gráfico que os <code>Card*</code> não cobrem
-      ou para construir visualizações totalmente customizadas.
+    <p class="doc-lead">
+      Quando o gráfico que você precisa não existe entre os <code>Card*</code>, o
+      <code>ChartBase</code> dá acesso direto ao <strong>Chart.js</strong> sem o trabalho manual:
+      ele registra os controllers e scales mais usados, cuida do ciclo de vida
+      (criar/atualizar/destruir) e aplica defaults responsivos.
     </p>
 
     <h2>Demonstração</h2>
@@ -104,15 +120,25 @@ const doughnutCode = `<ChartBase
       <ChartBase type="line" :data="chartData" :options="chartOptions" :height="300" />
     </div>
 
-    <h2>Uso básico</h2>
+    <h2>Desenhando um gráfico de linha</h2>
     <CodeBlock :code="basicCode" language="vue" />
 
-    <h2>Barras</h2>
+    <h2>Desenhando barras</h2>
     <CodeBlock :code="barCode" language="vue" />
 
-    <h2>Doughnut</h2>
-    <p>Qualquer tipo nativo do Chart.js funciona — basta informar <code>type</code> e o <code>data</code> correspondente:</p>
+    <h2>Desenhando um doughnut</h2>
+    <p>
+      Qualquer tipo nativo do Chart.js funciona — informe <code>type</code> e o
+      <code>data</code> correspondente:
+    </p>
     <CodeBlock :code="doughnutCode" language="vue" />
+
+    <h2>Acessando a instância do Chart.js</h2>
+    <p>
+      O componente expõe a instância nativa através de uma template ref — útil para chamar APIs
+      do Chart.js diretamente, como <code>resetZoom()</code> de plugins ou leituras do estado:
+    </p>
+    <CodeBlock :code="refCode" language="vue" />
 
     <h2>Props</h2>
     <PropsTable :props="props" />

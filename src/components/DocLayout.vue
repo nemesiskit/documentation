@@ -1,10 +1,11 @@
 <script setup>
-import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
+import { ref } from 'vue'
 import DocSidebar from './DocSidebar.vue'
 import DocHeader from './DocHeader.vue'
+import Breadcrumbs from './Breadcrumbs.vue'
+import OnThisPage from './OnThisPage.vue'
 
-const sidebarOpen = ref(true)
+const sidebarOpen = ref(typeof window === 'undefined' ? true : window.innerWidth > 960)
 </script>
 
 <template>
@@ -13,8 +14,14 @@ const sidebarOpen = ref(true)
     <div class="doc-body">
       <DocSidebar :open="sidebarOpen" />
       <main class="doc-main" :class="{ 'sidebar-open': sidebarOpen }">
-        <div class="doc-page">
-          <slot />
+        <div class="doc-container">
+          <div class="doc-page">
+            <Breadcrumbs />
+            <slot />
+          </div>
+          <div class="doc-rail">
+            <OnThisPage />
+          </div>
         </div>
       </main>
     </div>
@@ -44,10 +51,30 @@ const sidebarOpen = ref(true)
   margin-left: var(--sidebar-width);
 }
 
-.doc-page {
-  max-width: 860px;
+.doc-container {
+  display: flex;
+  gap: 3rem;
+  max-width: 1080px;
   margin: 0 auto;
-  padding: 3rem 2.5rem;
+  padding: 3rem 2.5rem 4rem;
+  align-items: flex-start;
+}
+
+.doc-page {
+  flex: 1;
+  min-width: 0;
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.doc-rail {
+  flex-shrink: 0;
+}
+
+@media (max-width: 1240px) {
+  .doc-rail {
+    display: none;
+  }
 }
 
 @media (max-width: 768px) {
@@ -55,8 +82,8 @@ const sidebarOpen = ref(true)
     margin-left: 0;
   }
 
-  .doc-page {
-    padding: 2rem 1.25rem;
+  .doc-container {
+    padding: 2rem 1.25rem 3rem;
   }
 }
 </style>

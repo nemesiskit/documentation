@@ -2,21 +2,17 @@
 import CodeBlock from '@/components/CodeBlock.vue'
 import { RouterLink } from 'vue-router'
 
-const installCode = `npm install nemesischart chart.js primevue primeflex primeicons`
+const installCode = `npm install nemesischart chart.js`
 
 const setupCode = `// main.js
 import { createApp } from 'vue'
-import PrimeVue from 'primevue/config'
 import NemesisChart from 'nemesischart'
 
-import 'primeflex/primeflex.css'
-import 'primeicons/primeicons.css'
 import 'nemesischart/style.css'  // estilos obrigatórios
 
 import App from './App.vue'
 
 createApp(App)
-  .use(PrimeVue)
   .use(NemesisChart)
   .mount('#app')`
 
@@ -41,16 +37,34 @@ const data = [
   />
 </template>`
 
+const heroCode = `<CardPizza
+  legenda="Dispositivos"
+  titulo="9.770"
+  corDetalhes="#2563eb"
+  :detalheTooltip="(item) => \`\${item.share}% do total\`"
+  :data="data"
+/>`
+
 const features = [
+  {
+    title: 'Sem dependências de UI',
+    desc: 'Só o Chart.js como peer dependency. Todo o CSS necessário já vem embutido no bundle, com prefixo nc-.',
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>`
+  },
   {
     title: '7 componentes',
     desc: 'Linhas, barras, pizza, polar, progresso, container base e wrapper Chart.js.',
     icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>`
   },
   {
-    title: '2 temas',
-    desc: 'light e dark prontos, com override total via corFundo, corTexto e corBorda.',
-    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/></svg>`
+    title: 'Tooltips com contexto',
+    desc: 'A prop detalheTooltip adiciona informações extras do seu dataset ao tooltip, abaixo do valor.',
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`
+  },
+  {
+    title: 'Paleta automática',
+    desc: 'Uma única corDetalhes gera os tons das fatias e setores. Cada item pode sobrescrever com cor.',
+    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="13.5" cy="6.5" r=".5"/><circle cx="17.5" cy="10.5" r=".5"/><circle cx="8.5" cy="7.5" r=".5"/><circle cx="6.5" cy="12.5" r=".5"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg>`
   },
   {
     title: 'Formatação inteligente',
@@ -68,14 +82,9 @@ const features = [
     icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>`
   },
   {
-    title: 'Vue 3 + Composition API',
-    desc: 'Composables expostos: useTema, useFormatadorValor, useTooltipExterno, useExportarImagem.',
+    title: 'Composables expostos',
+    desc: 'useTema, useFormatadorValor, useLinhasReferencia, gerarPaleta e outros utilitários para criar seus próprios cards.',
     icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`
-  },
-  {
-    title: 'Cards interativos',
-    desc: 'CardPizza e CardPolar emitem @itemClicado ao clicar nas fatias quando itensClicaveis está ativo.',
-    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11.5V5.5a1.5 1.5 0 0 1 3 0v5"/><path d="M12 10V4.5a1.5 1.5 0 0 1 3 0V10"/><path d="M15 9.5a1.5 1.5 0 0 1 3 0V14a6 6 0 0 1-6 6h-1a6 6 0 0 1-5-2.7L3.5 14a1.5 1.5 0 0 1 2.5-1.6L8 14"/></svg>`
   },
 ]
 
@@ -88,24 +97,64 @@ const components = [
   { name: 'CardProgresso', label: 'Progresso linear/circular', to: '/nemesischart/card-progresso', icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="9" width="20" height="6" rx="3"/><rect x="2" y="9" width="14" height="6" rx="3" fill="currentColor" opacity="0.4"/></svg>` },
   { name: 'ChartBase', label: 'Wrapper Chart.js', to: '/nemesischart/chart-base', icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 14l4-4 4 4 5-5"/></svg>` },
 ]
+
+const changes = [
+  {
+    title: 'Zero dependências de UI',
+    desc: 'PrimeVue, PrimeFlex e PrimeIcons deixaram de ser necessários. As únicas peer dependencies agora são vue e chart.js — o CSS utilitário vem embutido em nemesischart/style.css, mantendo o mesmo visual.',
+  },
+  {
+    title: 'Tooltips com informações extras',
+    desc: 'CardLinhas, CardBarra, CardPizza e CardPolar ganharam a prop detalheTooltip, que recebe o item original de data e devolve linhas adicionais para o tooltip.',
+  },
+  {
+    title: 'Tooltip nas linhas da tabela',
+    desc: 'Em CardPizza e CardPolar, a prop tooltipLinha define o texto exibido ao pousar o mouse sobre uma linha da tabela lateral. Sem ela, o componente usa item.descricao.',
+  },
+  {
+    title: 'Paleta gerada a partir de uma cor',
+    desc: 'CardPizza, CardPolar e CardProgresso trocaram o array cores pela prop corDetalhes: os tons das fatias são derivados dela, e cada item pode definir a própria cor. A função gerarPaleta ficou disponível para uso externo.',
+  },
+  {
+    title: 'Mais utilitários exportados',
+    desc: 'useLinhasReferencia, useExportarCard, gerarPaleta, toRgba, helpers de tooltip e as fábricas de props (propsCartao, propsValor, propsDirecao, propsTabela) agora fazem parte da API pública.',
+  },
+]
 </script>
 
 <template>
   <div class="doc-content">
     <div class="page-badge">
       <span class="badge badge-purple">NemesisChart</span>
-      <span class="badge badge-green">v2.0.9</span>
+      <span class="badge badge-green">v2.0.11</span>
     </div>
 
     <h1>Introdução</h1>
+    <p class="doc-lead">
+      Montar um dashboard costuma exigir repetir a mesma estrutura em todos os cards: título, valor de
+      destaque, gráfico, formatação de moeda, tema claro ou escuro. O
+      <strong>NemesisChart</strong> resolve essa repetição com cards prontos para Vue 3, construídos
+      sobre <strong>Chart.js</strong> e sem nenhuma dependência de UI externa — todo o CSS necessário
+      já vem no bundle.
+    </p>
+
+    <div class="hero-panel">
+      <div class="hero-glow"></div>
+      <div class="hero-card">
+        <div class="hero-card-header">
+          <span class="hero-dot" style="background:#f87171"></span>
+          <span class="hero-dot" style="background:#fbbf24"></span>
+          <span class="hero-dot" style="background:#4ade80"></span>
+          <span class="hero-card-title">card-pizza.vue</span>
+        </div>
+        <CodeBlock :code="heroCode" language="vue" class="hero-code" />
+      </div>
+    </div>
+
+    <h2>Por que usar o NemesisChart?</h2>
     <p>
-      <strong style="color: #fff">NemesisChart</strong> é uma biblioteca de componentes Vue 3 para construção
-      rápida de cards e dashboards com gráficos. Construída sobre
-      <strong style="color: var(--color-accent-2)">Chart.js</strong>,
-      <strong style="color: var(--color-accent-2)">PrimeVue</strong> e
-      <strong style="color: var(--color-accent-2)">PrimeFlex</strong>, todos os cards seguem o mesmo padrão:
-      legenda, sublegenda, valor de destaque, descrição e o gráfico correspondente — com suporte a temas
-      claro/escuro, formatação automática de valores e exportação como imagem.
+      Todos os cards seguem o mesmo padrão — legenda, sublegenda, valor de destaque, descrição e o
+      gráfico correspondente — para que o seu dashboard tenha consistência visual sem esforço extra:
     </p>
 
     <div class="feature-grid">
@@ -114,6 +163,23 @@ const components = [
         <div>
           <div class="feature-title">{{ f.title }}</div>
           <div class="feature-desc">{{ f.desc }}</div>
+        </div>
+      </div>
+    </div>
+
+    <h2>O que há de novo na 2.0.11</h2>
+    <p>
+      A série 2.0.10/2.0.11 removeu as dependências externas de UI e ampliou a customização de
+      tooltips e cores. Se você vem de uma versão anterior, veja o
+      <RouterLink to="/nemesischart/instalacao" class="text-accent">guia de migração</RouterLink>.
+    </p>
+
+    <div class="changes-list">
+      <div v-for="c in changes" :key="c.title" class="change-item">
+        <div class="change-marker"></div>
+        <div>
+          <div class="change-title">{{ c.title }}</div>
+          <div class="change-desc">{{ c.desc }}</div>
         </div>
       </div>
     </div>
@@ -134,8 +200,8 @@ const components = [
       </RouterLink>
     </div>
 
-    <h2>Início rápido</h2>
-    <p>Instale o pacote e seus peer dependencies:</p>
+    <h2>Comece em cinco minutos</h2>
+    <p>Instale o pacote junto com o Chart.js — nenhuma outra dependência é necessária:</p>
     <CodeBlock :code="installCode" language="bash" />
 
     <p>Registre o plugin no seu <code>main.js</code>:</p>
@@ -147,17 +213,77 @@ const components = [
     <div class="next-links">
       <RouterLink to="/nemesischart/instalacao" class="next-link">
         <div class="next-label">Próximo</div>
-        <div class="next-title">Instalação & Configuração →</div>
+        <div class="next-title">Instalação & Migração →</div>
       </RouterLink>
     </div>
   </div>
 </template>
 
 <style scoped>
-.page-badge {
+.hero-panel {
+  position: relative;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(120deg, #c7d2fe 0%, #a5b4fc 28%, #93c5fd 55%, #a5f3fc 100%);
+  padding: 2.5rem 2rem;
+  margin: 1.75rem 0 0.5rem;
+  overflow: hidden;
+}
+
+.dark .hero-panel {
+  background: linear-gradient(120deg, #312e81 0%, #1e3a8a 45%, #164e63 100%);
+}
+
+.hero-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at 20% 10%, rgba(255, 255, 255, 0.55), transparent 55%);
+  pointer-events: none;
+}
+
+.dark .hero-glow {
+  background: radial-gradient(ellipse at 20% 10%, rgba(255, 255, 255, 0.12), transparent 55%);
+}
+
+.hero-card {
+  position: relative;
+  max-width: 520px;
+  margin: 0 auto;
+  border-radius: var(--radius);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-pop);
+  overflow: hidden;
+}
+
+.hero-card-header {
   display: flex;
-  gap: 0.5rem;
-  margin-bottom: 1.25rem;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.hero-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+}
+
+.hero-card-title {
+  margin-left: 0.5rem;
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  color: var(--color-text-muted);
+}
+
+.hero-code {
+  margin-bottom: 0 !important;
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+}
+
+.hero-code :deep(.code-header) {
+  display: none;
 }
 
 .feature-grid {
@@ -181,7 +307,7 @@ const components = [
   flex-shrink: 0;
   width: 34px;
   height: 34px;
-  background: rgba(37, 99, 235, 0.1);
+  background: var(--color-accent-soft);
   border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
@@ -192,7 +318,7 @@ const components = [
 .feature-title {
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--color-text);
+  color: var(--color-heading);
   margin-bottom: 0.2rem;
 }
 
@@ -200,6 +326,45 @@ const components = [
   font-size: 0.8rem;
   color: var(--color-text-muted);
   line-height: 1.5;
+}
+
+.changes-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 1.5rem 0 2rem;
+  border-left: 2px solid var(--color-border);
+  padding-left: 1.25rem;
+}
+
+.change-item {
+  position: relative;
+  display: flex;
+  gap: 0.75rem;
+}
+
+.change-marker {
+  position: absolute;
+  left: calc(-1.25rem - 6px);
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-accent-2);
+  box-shadow: 0 0 0 3px var(--color-accent-soft);
+}
+
+.change-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-heading);
+  margin-bottom: 0.2rem;
+}
+
+.change-desc {
+  font-size: 0.83rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
 }
 
 .components-grid {
@@ -223,8 +388,9 @@ const components = [
 }
 
 .comp-card:hover {
-  border-color: rgba(37, 99, 235, 0.35);
-  background: var(--color-surface-2);
+  border-color: var(--color-accent-border);
+  background: var(--color-bg);
+  box-shadow: var(--shadow-card);
 }
 
 .comp-icon {
@@ -235,7 +401,7 @@ const components = [
 .comp-name {
   font-size: 0.85rem;
   font-weight: 600;
-  color: var(--color-text);
+  color: var(--color-heading);
   font-family: var(--font-mono);
 }
 
@@ -269,7 +435,6 @@ const components = [
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--color-accent-2);
-  transition: gap 0.2s;
 }
 
 .next-link:hover .next-title {

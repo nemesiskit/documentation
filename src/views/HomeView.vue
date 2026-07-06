@@ -23,8 +23,8 @@ const packages = [
   {
     name: 'NemesisChart',
     slug: 'nemesischart',
-    description: 'Componentes de gráficos para Vue 3 com animações GSAP, temas dinâmicos e integração Chart.js.',
-    badge: 'v2.0.9',
+    description: 'Cards de gráficos para Vue 3 construídos sobre Chart.js, sem dependências de UI — temas, formatação de valores e exportação para PNG.',
+    badge: 'v2.0.11',
     badgeType: 'purple',
     status: 'Estável',
     components: 7,
@@ -119,8 +119,8 @@ const packages = [
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    linear-gradient(var(--home-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--home-grid-line) 1px, transparent 1px);
   background-size: 40px 40px;
   mask-image: radial-gradient(ellipse at 50% 40%, black 30%, transparent 75%);
 }
@@ -196,7 +196,7 @@ const packages = [
   margin-bottom: 1.25rem;
 }
 
-.title-nemesis { color: #fff; }
+.title-nemesis { color: var(--color-heading); }
 .title-kit { color: var(--color-accent-2); }
 
 .hero-desc {
@@ -227,10 +227,10 @@ const packages = [
 }
 
 .package-card:hover:not(.card-disabled) {
-  border-color: rgba(37, 99, 235, 0.4);
-  background: var(--color-surface-2);
+  border-color: var(--color-accent-border);
+  background: var(--color-bg);
   transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(37, 99, 235, 0.15);
+  box-shadow: var(--shadow-pop);
 }
 
 .card-disabled {
@@ -267,7 +267,7 @@ const packages = [
 .card-title {
   font-size: 1.3rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--color-heading);
   letter-spacing: -0.02em;
   margin-bottom: 0.6rem;
 }

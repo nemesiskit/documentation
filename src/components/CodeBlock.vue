@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 
 const props = defineProps({
   code: { type: String, required: true },
@@ -13,6 +13,54 @@ async function copy() {
   copied.value = true
   setTimeout(() => (copied.value = false), 2000)
 }
+
+/* Realce leve por regex: comentários, strings, tags, atributos,
+   palavras-chave e números. Suficiente para os exemplos da doc. */
+function escapeHtml(text) {
+  return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+}
+
+function buildRules(language) {
+  const rules = []
+  if (language === 'bash') {
+    rules.push(['token-comment', /#[^\n]*/y])
+    rules.push(['token-string', /'[^'\n]*'|"[^"\n]*"/y])
+    return rules
+  }
+  rules.push(['token-comment', /<!--[\s\S]*?-->|\/\/[^\n]*|\/\*[\s\S]*?\*\//y])
+  rules.push(['token-string', /'(?:[^'\\\n]|\\.)*'|"(?:[^"\\\n]|\\.)*"|`(?:[^`\\]|\\.)*`/y])
+  rules.push(['token-keyword', /=>/y])
+  rules.push(['token-tag', /<\/?[A-Za-z][\w.-]*|\/>/y])
+  rules.push(['token-attr', /[:@][\w-]+(?==)|#[\w-]+|\b[\w-]+(?==")/y])
+  rules.push(['token-keyword', /\b(?:import|from|export|default|const|let|var|function|return|new|typeof|async|await|if|else|for|of|in|true|false|null|undefined)\b/y])
+  rules.push(['token-number', /\b\d[\d_]*(?:\.\d+)?\b/y])
+  return rules
+}
+
+const highlighted = computed(() => {
+  const source = props.code.trim()
+  const rules = buildRules(props.language)
+  let html = ''
+  let i = 0
+  while (i < source.length) {
+    let matched = false
+    for (const [cls, re] of rules) {
+      re.lastIndex = i
+      const m = re.exec(source)
+      if (m && m[0]) {
+        html += `<span class="${cls}">${escapeHtml(m[0])}</span>`
+        i += m[0].length
+        matched = true
+        break
+      }
+    }
+    if (!matched) {
+      html += escapeHtml(source[i])
+      i++
+    }
+  }
+  return html
+})
 </script>
 
 <template>
@@ -35,7 +83,7 @@ async function copy() {
         </template>
       </button>
     </div>
-    <pre class="code-block"><code>{{ code.trim() }}</code></pre>
+    <pre class="code-block"><code v-html="highlighted"></code></pre>
   </div>
 </template>
 
@@ -45,13 +93,14 @@ async function copy() {
   border-radius: var(--radius);
   border: 1px solid var(--color-border);
   overflow: hidden;
+  box-shadow: var(--shadow-card);
 }
 
 .code-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: var(--color-surface-2);
+  background: var(--code-header-bg);
   padding: 0.5rem 1rem;
   border-bottom: 1px solid var(--color-border);
 }
@@ -80,19 +129,20 @@ async function copy() {
 }
 
 .copy-btn:hover {
-  color: var(--color-text);
-  background: rgba(255, 255, 255, 0.05);
+  color: var(--color-heading);
+  background: var(--color-surface-2);
 }
 
 .code-block {
   margin: 0;
   padding: 1.25rem 1.5rem;
-  background: #0d0d14;
+  background: var(--code-bg);
   overflow-x: auto;
   font-size: 0.85rem;
   line-height: 1.75;
-  color: #c9d1d9;
+  color: var(--code-text);
   border-radius: 0;
   border: none;
+  box-shadow: none;
 }
 </style>

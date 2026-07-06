@@ -1,31 +1,99 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
+/* ---------------------------------------------------------------------------
+   Design tokens — tema claro (padrão) e escuro (.dark no <html>)
+--------------------------------------------------------------------------- */
 :root {
+  color-scheme: light;
+
+  --color-bg: #ffffff;
+  --color-bg-2: #fbfbfd;
+  --color-bg-3: #f6f7fa;
+  --color-surface: #f8f9fb;
+  --color-surface-2: #eef0f5;
+  --color-border: #e7e9f0;
+  --color-border-hover: #d2d6e0;
+
+  --color-heading: #101322;
+  --color-text: #333849;
+  --color-text-muted: #5f6675;
+  --color-text-subtle: #8a91a3;
+
+  --color-accent: #2563eb;
+  --color-accent-2: #2563eb;
+  --color-accent-soft: rgba(37, 99, 235, 0.08);
+  --color-accent-border: rgba(37, 99, 235, 0.28);
+  --color-accent-glow: rgba(37, 99, 235, 0.18);
+
+  --color-success: #15803d;
+  --color-warning: #b45309;
+  --color-danger: #dc2626;
+
+  --code-bg: #ffffff;
+  --code-header-bg: #f8f9fb;
+  --code-text: #24292f;
+
+  --scrollbar-thumb: rgba(16, 19, 34, 0.16);
+  --scrollbar-thumb-hover: rgba(16, 19, 34, 0.28);
+
+  --shadow-card: 0 1px 2px rgba(16, 19, 34, 0.04), 0 10px 28px -16px rgba(16, 19, 34, 0.14);
+  --shadow-pop: 0 4px 10px rgba(16, 19, 34, 0.06), 0 20px 44px -16px rgba(16, 19, 34, 0.18);
+
+  --home-grid-line: rgba(16, 19, 34, 0.045);
+
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  --sidebar-width: 272px;
+  --toc-width: 216px;
+  --header-height: 109px; /* 64px (topo) + 44px (nav) + 1px (borda) */
+  --radius: 10px;
+  --radius-sm: 6px;
+  --radius-lg: 16px;
+}
+
+.dark {
+  color-scheme: dark;
+
   --color-bg: #0a0a0f;
   --color-bg-2: #111118;
   --color-bg-3: #1a1a24;
   --color-surface: #16161e;
   --color-surface-2: #1e1e2a;
   --color-border: rgba(255, 255, 255, 0.07);
-  --color-border-hover: rgba(255, 255, 255, 0.15);
+  --color-border-hover: rgba(255, 255, 255, 0.16);
+
+  --color-heading: #ffffff;
   --color-text: #e8e8f0;
-  --color-text-muted: #8888a8;
-  --color-text-subtle: #5555708;
+  --color-text-muted: #9a9ab4;
+  --color-text-subtle: #6b6b88;
+
   --color-accent: #2563eb;
   --color-accent-2: #60a5fa;
+  --color-accent-soft: rgba(37, 99, 235, 0.14);
+  --color-accent-border: rgba(96, 165, 250, 0.35);
   --color-accent-glow: rgba(37, 99, 235, 0.25);
+
   --color-success: #4ade80;
   --color-warning: #fbbf24;
   --color-danger: #f87171;
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
-  --sidebar-width: 260px;
-  --header-height: 64px;
-  --radius: 10px;
-  --radius-sm: 6px;
-  --radius-lg: 16px;
+
+  --code-bg: #0d0d14;
+  --code-header-bg: #16161e;
+  --code-text: #c9d1d9;
+
+  --scrollbar-thumb: rgba(255, 255, 255, 0.12);
+  --scrollbar-thumb-hover: rgba(255, 255, 255, 0.22);
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.3), 0 12px 32px -16px rgba(0, 0, 0, 0.5);
+  --shadow-pop: 0 4px 10px rgba(0, 0, 0, 0.35), 0 24px 48px -16px rgba(0, 0, 0, 0.6);
+
+  --home-grid-line: rgba(255, 255, 255, 0.03);
 }
 
+/* ---------------------------------------------------------------------------
+   Base
+--------------------------------------------------------------------------- */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -40,6 +108,7 @@ html {
 body {
   font-family: var(--font-sans);
   background: var(--color-bg);
+  color: var(--color-text);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
@@ -47,6 +116,17 @@ body {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+kbd {
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-bottom-width: 2px;
+  border-radius: 5px;
+  padding: 0.1em 0.45em;
 }
 
 /* Scrollbar */
@@ -58,43 +138,55 @@ a {
   background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--scrollbar-thumb);
   border-radius: 99px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--scrollbar-thumb-hover);
 }
 
-/* Code blocks */
+/* ---------------------------------------------------------------------------
+   Blocos de código
+--------------------------------------------------------------------------- */
 pre, code {
   font-family: var(--font-mono);
 }
 
 .code-block {
-  background: #0d0d14;
+  background: var(--code-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--radius);
   padding: 1.25rem 1.5rem;
   overflow-x: auto;
   font-size: 0.875rem;
   line-height: 1.7;
-  color: #c9d1d9;
+  color: var(--code-text);
   position: relative;
 }
 
-.code-block .token-keyword { color: #ff7b72; }
-.code-block .token-string { color: #a5d6ff; }
-.code-block .token-comment { color: #8b949e; font-style: italic; }
-.code-block .token-function { color: #d2a8ff; }
-.code-block .token-number { color: #79c0ff; }
-.code-block .token-tag { color: #7ee787; }
-.code-block .token-attr { color: #ff7b72; }
+.code-block .token-keyword { color: #cf222e; }
+.code-block .token-string { color: #0a3069; }
+.code-block .token-comment { color: #6e7781; font-style: italic; }
+.code-block .token-function { color: #8250df; }
+.code-block .token-number { color: #0550ae; }
+.code-block .token-tag { color: #116329; }
+.code-block .token-attr { color: #953800; }
 
-/* Doc content typography */
+.dark .code-block .token-keyword { color: #ff7b72; }
+.dark .code-block .token-string { color: #a5d6ff; }
+.dark .code-block .token-comment { color: #8b949e; }
+.dark .code-block .token-function { color: #d2a8ff; }
+.dark .code-block .token-number { color: #79c0ff; }
+.dark .code-block .token-tag { color: #7ee787; }
+.dark .code-block .token-attr { color: #ffa657; }
+
+/* ---------------------------------------------------------------------------
+   Tipografia do conteúdo
+--------------------------------------------------------------------------- */
 .doc-content h1 {
-  font-size: 2.25rem;
+  font-size: 2.15rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--color-heading);
   letter-spacing: -0.03em;
   line-height: 1.2;
   margin-bottom: 0.75rem;
@@ -103,20 +195,25 @@ pre, code {
 .doc-content h2 {
   font-size: 1.375rem;
   font-weight: 600;
-  color: #fff;
+  color: var(--color-heading);
   letter-spacing: -0.02em;
-  margin-top: 2.5rem;
+  margin-top: 2.75rem;
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--color-border);
 }
 
 .doc-content h3 {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 600;
-  color: var(--color-text);
+  color: var(--color-heading);
   margin-top: 2rem;
   margin-bottom: 0.75rem;
+}
+
+.doc-content h2,
+.doc-content h3 {
+  scroll-margin-top: calc(var(--header-height) + 20px);
 }
 
 .doc-content p {
@@ -136,15 +233,43 @@ pre, code {
   line-height: 1.7;
 }
 
+.doc-content strong {
+  color: var(--color-heading);
+  font-weight: 600;
+}
+
 .doc-content code {
-  background: rgba(37, 99, 235, 0.12);
+  background: var(--color-accent-soft);
   color: var(--color-accent-2);
   padding: 0.15em 0.45em;
   border-radius: 4px;
   font-size: 0.85em;
 }
 
-/* Props table */
+/* Dentro dos blocos de código, o estilo de code inline não se aplica */
+.code-block code,
+.doc-content .code-block code {
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  border-radius: 0;
+  font-size: inherit;
+}
+
+.doc-lead {
+  font-size: 1.02rem;
+}
+
+.page-badge {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Tabelas de referência (props, eventos, slots)
+--------------------------------------------------------------------------- */
 .props-table {
   width: 100%;
   border-collapse: collapse;
@@ -155,7 +280,7 @@ pre, code {
 .props-table th {
   text-align: left;
   padding: 0.6rem 1rem;
-  background: var(--color-surface-2);
+  background: var(--color-surface);
   color: var(--color-text-muted);
   font-weight: 500;
   font-size: 0.8rem;
@@ -179,7 +304,7 @@ pre, code {
 }
 
 .props-table tr:hover td {
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--color-bg-3);
 }
 
 .props-table .prop-name {
@@ -190,17 +315,19 @@ pre, code {
 
 .props-table .prop-type {
   font-family: var(--font-mono);
-  color: #fbbf24;
+  color: var(--color-warning);
   font-size: 0.8rem;
 }
 
 .props-table .prop-default {
   font-family: var(--font-mono);
-  color: #4ade80;
+  color: var(--color-success);
   font-size: 0.8rem;
 }
 
-/* Demo section */
+/* ---------------------------------------------------------------------------
+   Áreas de demonstração
+--------------------------------------------------------------------------- */
 .demo-section {
   background: #f3f4f6;
   border: 1px solid #e5e7eb;
@@ -248,7 +375,9 @@ pre, code {
   margin-bottom: 1.25rem;
 }
 
-/* Badge */
+/* ---------------------------------------------------------------------------
+   Badges
+--------------------------------------------------------------------------- */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -259,24 +388,62 @@ pre, code {
 }
 
 .badge-purple {
-  background: rgba(37, 99, 235, 0.15);
+  background: var(--color-accent-soft);
   color: var(--color-accent-2);
-  border: 1px solid rgba(37, 99, 235, 0.3);
+  border: 1px solid var(--color-accent-border);
 }
 
 .badge-green {
-  background: rgba(74, 222, 128, 0.1);
-  color: #4ade80;
-  border: 1px solid rgba(74, 222, 128, 0.25);
+  background: rgba(22, 163, 74, 0.08);
+  color: var(--color-success);
+  border: 1px solid rgba(22, 163, 74, 0.25);
 }
 
 .badge-yellow {
-  background: rgba(251, 191, 36, 0.1);
-  color: #fbbf24;
-  border: 1px solid rgba(251, 191, 36, 0.25);
+  background: rgba(180, 83, 9, 0.08);
+  color: var(--color-warning);
+  border: 1px solid rgba(180, 83, 9, 0.25);
 }
 
-/* Utility */
+.dark .badge-green {
+  background: rgba(74, 222, 128, 0.1);
+  border-color: rgba(74, 222, 128, 0.25);
+}
+
+.dark .badge-yellow {
+  background: rgba(251, 191, 36, 0.1);
+  border-color: rgba(251, 191, 36, 0.25);
+}
+
+/* ---------------------------------------------------------------------------
+   Callouts
+--------------------------------------------------------------------------- */
+.callout {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  background: var(--color-accent-soft);
+  border: 1px solid var(--color-accent-border);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin: 1.5rem 0;
+}
+
+.callout svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+  color: var(--color-accent-2);
+}
+
+.callout strong {
+  color: var(--color-heading);
+}
+
+/* ---------------------------------------------------------------------------
+   Utilitários
+--------------------------------------------------------------------------- */
 .text-accent { color: var(--color-accent-2); }
 .text-muted { color: var(--color-text-muted); }
 .font-mono { font-family: var(--font-mono); }

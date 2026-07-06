@@ -10,25 +10,26 @@ const tipoValor = ref('moeda')
 const corDetalhes = ref('#3B82F6')
 
 const data = [
-  { rotulo: 'Jan', quantidade: 1200 },
-  { rotulo: 'Fev', quantidade: 2800 },
-  { rotulo: 'Mar', quantidade: 3200 },
-  { rotulo: 'Abr', quantidade: 2100 },
-  { rotulo: 'Mai', quantidade: 4500 },
-  { rotulo: 'Jun', quantidade: 3900 },
-  { rotulo: 'Jul', quantidade: 5200 },
+  { rotulo: 'Jan', quantidade: 1200, pedidos: 34 },
+  { rotulo: 'Fev', quantidade: 2800, pedidos: 61 },
+  { rotulo: 'Mar', quantidade: 3200, pedidos: 79 },
+  { rotulo: 'Abr', quantidade: 2100, pedidos: 48 },
+  { rotulo: 'Mai', quantidade: 4500, pedidos: 102 },
+  { rotulo: 'Jun', quantidade: 3900, pedidos: 88 },
+  { rotulo: 'Jul', quantidade: 5200, pedidos: 121 },
 ]
 
 const props = [
-  { name: 'data', type: 'Array<{ rotulo, quantidade }>', default: 'amostra', description: 'Pontos do gráfico.' },
+  { name: 'data', type: 'Array<{ rotulo, quantidade }>', default: 'amostra', description: 'Pontos do gráfico. Campos extras ficam disponíveis para detalheTooltip.' },
   { name: 'corDetalhes', type: 'String', default: "'#3B82F6'", description: 'Cor da linha e do gradiente sob a curva.' },
+  { name: 'detalheTooltip', type: '(item, index) => String | String[]', default: 'null', description: 'Devolve texto(s) extra(s) exibidos no tooltip abaixo do valor. Recebe o item original de data.' },
+  { name: 'linhasReferencia', type: 'Object | Array', default: 'null', description: 'Linhas horizontais de referência sobre o gráfico ({ valor, rotulo, cor }).' },
   { name: 'tema', type: "'light' | 'dark'", default: "'light'", description: 'Paleta base do card.' },
   { name: 'direcao', type: "'top' | 'bottom' | 'left' | 'right'", default: "'top'", description: 'Posição do header em relação ao gráfico.' },
   { name: 'tipoValor', type: "'numero' | 'moeda' | 'percentual'", default: "'numero'", description: 'Formatação dos valores no tooltip e eixo.' },
   { name: 'locale', type: 'String', default: "'pt-BR'", description: 'Locale do Intl.' },
   { name: 'moeda', type: 'String', default: "'BRL'", description: 'Código ISO da moeda.' },
   { name: 'height', type: 'String | Number', default: '280', description: 'Altura do gráfico em px.' },
-  { name: 'linhasReferencia', type: 'Object | Array', default: 'null', description: 'Linhas horizontais de referência sobre o gráfico.' },
   { name: 'legenda / sublegenda / titulo / descricao', type: 'String', default: 'null', description: 'Cabeçalho do card.' },
   { name: 'botaoVisivel', type: 'Boolean', default: 'false', description: 'Exibe o botão "Ver mais".' },
   { name: 'textoBotao', type: 'String', default: "'Ver mais'", description: 'Texto do botão.' },
@@ -81,6 +82,25 @@ const referenciaCode = `<CardLinhas
   :linhasReferencia="{ valor: 3000, rotulo: 'Meta', cor: '#10B981' }"
 />`
 
+const tooltipCode = `<script setup>
+import { CardLinhas } from 'nemesischart'
+
+// Campos extras do item ficam disponíveis no callback
+const data = [
+  { rotulo: 'Jan', quantidade: 2456173.9, pagamentos: 1353 },
+  { rotulo: 'Fev', quantidade: 3889895.3, pagamentos: 1269 },
+]
+<\/script>
+
+<template>
+  <CardLinhas
+    legenda="Pagamentos realizados"
+    tipoValor="moeda"
+    :data="data"
+    :detalheTooltip="(item) => \`\${item.pagamentos} pagamentos\`"
+  />
+</template>`
+
 const slotCode = `<CardLinhas legenda="Receita" :data="data" exportar>
   <!-- título customizado com markup -->
   <template #titulo>
@@ -101,12 +121,18 @@ const slotCode = `<CardLinhas legenda="Receita" :data="data" exportar>
       <span class="badge badge-purple">Componente</span>
     </div>
     <h1>CardLinhas</h1>
-    <p>
-      Gráfico de linhas com gradiente sob a curva. Ideal para séries temporais — faturamento,
-      tráfego, métricas acumuladas — com tooltips formatados e suporte a linhas de referência.
+    <p class="doc-lead">
+      Quando o objetivo é mostrar a evolução de um valor ao longo do tempo — faturamento, tráfego,
+      métricas acumuladas — o <code>CardLinhas</code> desenha a série como uma linha com gradiente
+      sob a curva, com tooltips formatados e suporte a linhas de referência para metas.
     </p>
 
     <h2>Demonstração</h2>
+    <p>
+      Passe o mouse sobre o gráfico: o tooltip mostra o valor formatado e, abaixo dele, a
+      quantidade de pedidos vinda do campo extra <code>pedidos</code> via
+      <code>detalheTooltip</code>.
+    </p>
 
     <div class="demo-controls">
       <div class="control-row">
@@ -138,18 +164,31 @@ const slotCode = `<CardLinhas legenda="Receita" :data="data" exportar>
         :tipoValor="tipoValor"
         :corDetalhes="corDetalhes"
         :data="data"
+        :detalheTooltip="(item) => `${item.pedidos} pedidos`"
         :botaoVisivel="true"
       />
     </div>
 
-    <h2>Uso básico</h2>
+    <h2>Exibindo uma série temporal</h2>
+    <p>
+      Cada ponto do gráfico é um objeto com <code>rotulo</code> e <code>quantidade</code>:
+    </p>
     <CodeBlock :code="basicCode" language="vue" />
 
-    <h2>Linhas de referência</h2>
-    <p>Defina uma ou várias linhas horizontais sobre o gráfico (ex.: meta, média):</p>
+    <h2>Marcando metas com linhas de referência</h2>
+    <p>Defina uma ou várias linhas horizontais sobre o gráfico (por exemplo: meta, média):</p>
     <CodeBlock :code="referenciaCode" language="vue" />
 
-    <h2>Customização com slots</h2>
+    <h2>Adicionando contexto ao tooltip</h2>
+    <p>
+      Às vezes o valor sozinho não conta a história completa — R$ 2.4M vieram de quantos
+      pagamentos? A prop <code>detalheTooltip</code> recebe o item original de <code>data</code>
+      (incluindo campos extras que você adicionar) e devolve uma string, ou um array de strings,
+      exibidas no tooltip abaixo do valor:
+    </p>
+    <CodeBlock :code="tooltipCode" language="vue" />
+
+    <h2>Substituindo textos com slots</h2>
     <p>Use os slots de cabeçalho para inserir markup rico no lugar das props de texto:</p>
     <CodeBlock :code="slotCode" language="vue" />
 
@@ -170,7 +209,7 @@ const slotCode = `<CardLinhas legenda="Receita" :data="data" exportar>
 .control-label { font-size: 0.8rem; color: var(--color-text-muted); min-width: 50px; }
 .control-group { display: flex; gap: 0.35rem; }
 .control-btn { padding: 0.3rem 0.75rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-text-muted); font-size: 0.8rem; cursor: pointer; transition: all 0.15s; }
-.control-btn.active { background: rgba(124,111,205,0.15); border-color: rgba(124,111,205,0.4); color: var(--color-accent-2); }
+.control-btn.active { background: var(--color-accent-soft); border-color: var(--color-accent-border); color: var(--color-accent-2); }
 .color-input { width: 32px; height: 28px; border: 1px solid var(--color-border); border-radius: 4px; cursor: pointer; background: transparent; }
 .color-value { font-size: 0.8rem; font-family: var(--font-mono); color: var(--color-text-muted); }
 </style>

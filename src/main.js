@@ -3,11 +3,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 import PrimeVue from 'primevue/config'
 import Aura from '@primevue/themes/aura'
 import App from './App.vue'
+import { applyTheme } from './theme.js'
 
 import 'primeflex/primeflex.css'
 import 'nemesischart/style.css'
 import 'nemesiselements/style.css'
 import './assets/main.css'
+
+applyTheme()
 
 import HomeView from './views/HomeView.vue'
 import NemesisChartView from './views/NemesisChartView.vue'

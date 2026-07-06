@@ -72,10 +72,11 @@ const temaCode = `<!-- Tema escuro -->
       <span class="badge badge-purple">Componente</span>
     </div>
     <h1>CardBase</h1>
-    <p>
-      Esqueleto sem gráfico. Fornece o layout padrão dos cards do NemesisChart — legenda, título,
-      descrição, botão de ação e área de conteúdo via slot — para criar visualizações customizadas
-      mantendo o visual da biblioteca.
+    <p class="doc-lead">
+      Nem todo card de dashboard tem um gráfico pronto na biblioteca. O <code>CardBase</code> é o
+      esqueleto sem gráfico: fornece o layout padrão do NemesisChart — legenda, título, descrição,
+      botão de ação e área de conteúdo via slot — para você criar visualizações próprias sem abrir
+      mão da consistência visual.
     </p>
 
     <h2>Demonstração</h2>
@@ -110,10 +111,14 @@ const temaCode = `<!-- Tema escuro -->
       </CardBase>
     </div>
 
-    <h2>Uso básico</h2>
+    <h2>Montando um card customizado</h2>
+    <p>
+      O slot padrão recebe o conteúdo principal — um gráfico próprio, uma tabela, um indicador —
+      e os slots nomeados cobrem cabeçalho e rodapé:
+    </p>
     <CodeBlock :code="basicCode" language="vue" />
 
-    <h2>Variações de tema</h2>
+    <h2>Ajustando tema e cores</h2>
     <CodeBlock :code="temaCode" language="vue" />
 
     <h2>Props</h2>
@@ -132,5 +137,5 @@ const temaCode = `<!-- Tema escuro -->
 .control-label { font-size: 0.8rem; color: var(--color-text-muted); }
 .control-group { display: flex; gap: 0.35rem; }
 .control-btn { padding: 0.3rem 0.75rem; background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-sm); color: var(--color-text-muted); font-size: 0.8rem; cursor: pointer; transition: all 0.15s; }
-.control-btn.active { background: rgba(37, 99, 235, 0.15); border-color: rgba(37, 99, 235, 0.4); color: var(--color-accent-2); }
+.control-btn.active { background: var(--color-accent-soft); border-color: var(--color-accent-border); color: var(--color-accent-2); }
 </style>
