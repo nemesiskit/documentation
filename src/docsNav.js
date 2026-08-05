@@ -20,7 +20,7 @@ const icons = {
 export const sections = {
   nemesischart: {
     label: 'NemesisChart',
-    version: 'v2.0.11',
+    version: 'v2.0.12',
     base: '/nemesischart',
     groups: [
       {

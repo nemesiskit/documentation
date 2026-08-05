@@ -100,6 +100,14 @@ const components = [
 
 const changes = [
   {
+    title: 'Curvatura da linha configurável',
+    desc: 'CardLinhas ganhou a prop tension (padrão 0.45): 0 desenha segmentos retos, 1 arredonda bem a curva. Valores fora do intervalo são limitados a 0–1.',
+  },
+  {
+    title: 'CardPolar só com a tabela',
+    desc: 'A prop mostrarGrafico do CardPolar permite esconder o gráfico e manter apenas a tabela lateral — título, descrição e cabeçalho continuam visíveis.',
+  },
+  {
     title: 'Zero dependências de UI',
     desc: 'PrimeVue, PrimeFlex e PrimeIcons deixaram de ser necessários. As únicas peer dependencies agora são vue e chart.js — o CSS utilitário vem embutido em nemesischart/style.css, mantendo o mesmo visual.',
   },
@@ -126,7 +134,7 @@ const changes = [
   <div class="doc-content">
     <div class="page-badge">
       <span class="badge badge-purple">NemesisChart</span>
-      <span class="badge badge-green">v2.0.11</span>
+      <span class="badge badge-green">v2.0.12</span>
     </div>
 
     <h1>Introdução</h1>
@@ -167,9 +175,11 @@ const changes = [
       </div>
     </div>
 
-    <h2>O que há de novo na 2.0.11</h2>
+    <h2>O que há de novo na 2.0.12</h2>
     <p>
-      A série 2.0.10/2.0.11 removeu as dependências externas de UI e ampliou a customização de
+      A 2.0.12 acrescentou dois pontos de customização — <code>tension</code> no
+      <code>CardLinhas</code> e <code>mostrarGrafico</code> no <code>CardPolar</code> — sobre a
+      série 2.0.10/2.0.11, que removeu as dependências externas de UI e ampliou a customização de
       tooltips e cores. Se você vem de uma versão anterior, veja o
       <RouterLink to="/nemesischart/instalacao" class="text-accent">guia de migração</RouterLink>.
     </p>

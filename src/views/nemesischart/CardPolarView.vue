@@ -8,6 +8,7 @@ import RefTable from '@/components/RefTable.vue'
 const tema = ref('light')
 const direcao = ref('right')
 const mostrarLinhasGrade = ref(true)
+const mostrarGrafico = ref(true)
 const corDetalhes = ref('#3B82F6')
 
 const data = [
@@ -22,6 +23,7 @@ const props = [
   { name: 'data', type: 'Array<{ rotulo, quantidade, cor?, descricao? }>', default: 'amostra', description: 'Setores polares. cor sobrescreve a paleta; descricao vira tooltip da linha da tabela.' },
   { name: 'corDetalhes', type: 'String', default: "'#3B82F6'", description: 'Cor base: a paleta dos setores é gerada em tons derivados dela.' },
   { name: 'mostrarLinhasGrade', type: 'Boolean', default: 'true', description: 'Exibe as linhas radiais e angulares do grid.' },
+  { name: 'mostrarGrafico', type: 'Boolean', default: 'true', description: 'Quando false, esconde o gráfico e deixa apenas a tabela (título e descrição continuam visíveis).' },
   { name: 'direcao', type: "'top' | 'bottom' | 'left' | 'right'", default: "'right'", description: 'Posição da tabela lateral em relação ao gráfico.' },
   { name: 'mostrarCabecalho', type: 'Boolean', default: 'true', description: 'Exibe o cabeçalho (Categoria/Quantidade) da tabela.' },
   { name: 'rotuloCategoria / rotuloQuantidade', type: 'String', default: "'Categoria' / 'Quantidade'", description: 'Títulos das colunas da tabela.' },
@@ -84,6 +86,15 @@ const coresCode = `<!-- A paleta dos setores nasce da cor base -->
   ]"
 />`
 
+const semGraficoCode = `<!-- Só a tabela: o card vira um ranking, sem o gráfico polar -->
+<CardPolar
+  legenda="Investimento por área"
+  titulo="R$ 12.8k"
+  tipoValor="moeda"
+  :data="data"
+  :mostrarGrafico="false"
+/>`
+
 const clicavelCode = `<CardPolar
   legenda="Investimento por área"
   :data="data"
@@ -126,6 +137,12 @@ const clicavelCode = `<CardPolar
         </div>
       </div>
       <div class="control-row">
+        <label class="control-label">Gráfico:</label>
+        <div class="control-group">
+          <button class="control-btn" :class="{ active: mostrarGrafico }" @click="mostrarGrafico = !mostrarGrafico">{{ mostrarGrafico ? 'visível' : 'só a tabela' }}</button>
+        </div>
+      </div>
+      <div class="control-row">
         <label class="control-label">Cor base:</label>
         <input type="color" v-model="corDetalhes" class="color-input" />
         <span class="color-value">{{ corDetalhes }}</span>
@@ -144,6 +161,7 @@ const clicavelCode = `<CardPolar
         :direcao="direcao"
         :corDetalhes="corDetalhes"
         :mostrarLinhasGrade="mostrarLinhasGrade"
+        :mostrarGrafico="mostrarGrafico"
         :botaoVisivel="true"
       />
     </div>
@@ -157,6 +175,14 @@ const clicavelCode = `<CardPolar
       <code>corDetalhes</code>, e cada item pode fixar a própria <code>cor</code>:
     </p>
     <CodeBlock :code="coresCode" language="vue" />
+
+    <h2>Exibindo apenas a tabela</h2>
+    <p>
+      Desde a <strong>2.0.12</strong>, <code>mostrarGrafico="false"</code> esconde o gráfico polar e
+      deixa somente a tabela — útil quando o mesmo dataset precisa aparecer como ranking em um
+      espaço estreito. Legenda, título e descrição continuam sendo exibidos:
+    </p>
+    <CodeBlock :code="semGraficoCode" language="vue" />
 
     <h2>Reagindo ao clique nos setores</h2>
     <p>

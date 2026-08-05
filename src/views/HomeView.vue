@@ -24,7 +24,7 @@ const packages = [
     name: 'NemesisChart',
     slug: 'nemesischart',
     description: 'Cards de gráficos para Vue 3 construídos sobre Chart.js, sem dependências de UI — temas, formatação de valores e exportação para PNG.',
-    badge: 'v2.0.11',
+    badge: 'v2.0.12',
     badgeType: 'purple',
     status: 'Estável',
     components: 7,

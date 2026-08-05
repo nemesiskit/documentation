@@ -8,6 +8,7 @@ import RefTable from '@/components/RefTable.vue'
 const tema = ref('light')
 const tipoValor = ref('moeda')
 const corDetalhes = ref('#3B82F6')
+const tension = ref(0.45)
 
 const data = [
   { rotulo: 'Jan', quantidade: 1200, pedidos: 34 },
@@ -22,6 +23,7 @@ const data = [
 const props = [
   { name: 'data', type: 'Array<{ rotulo, quantidade }>', default: 'amostra', description: 'Pontos do gráfico. Campos extras ficam disponíveis para detalheTooltip.' },
   { name: 'corDetalhes', type: 'String', default: "'#3B82F6'", description: 'Cor da linha e do gradiente sob a curva.' },
+  { name: 'tension', type: 'Number', default: '0.45', description: 'Curvatura da linha: 0 desenha segmentos retos, 1 arredonda ao máximo. Valores fora do intervalo são limitados a 0–1.' },
   { name: 'detalheTooltip', type: '(item, index) => String | String[]', default: 'null', description: 'Devolve texto(s) extra(s) exibidos no tooltip abaixo do valor. Recebe o item original de data.' },
   { name: 'linhasReferencia', type: 'Object | Array', default: 'null', description: 'Linhas horizontais de referência sobre o gráfico ({ valor, rotulo, cor }).' },
   { name: 'tema', type: "'light' | 'dark'", default: "'light'", description: 'Paleta base do card.' },
@@ -101,6 +103,15 @@ const data = [
   />
 </template>`
 
+const tensionCode = `<!-- Linha bem arredondada (padrão) -->
+<CardLinhas :data="data" :tension="0.45" />
+
+<!-- Segmentos retos, ponto a ponto -->
+<CardLinhas :data="data" :tension="0" />
+
+<!-- Curvatura máxima -->
+<CardLinhas :data="data" :tension="1" />`
+
 const slotCode = `<CardLinhas legenda="Receita" :data="data" exportar>
   <!-- título customizado com markup -->
   <template #titulo>
@@ -152,6 +163,11 @@ const slotCode = `<CardLinhas legenda="Receita" :data="data" exportar>
         <input type="color" v-model="corDetalhes" class="color-input" />
         <span class="color-value">{{ corDetalhes }}</span>
       </div>
+      <div class="control-row">
+        <label class="control-label">Curva:</label>
+        <input type="range" min="0" max="1" step="0.05" v-model.number="tension" class="range-input" />
+        <span class="color-value">tension: {{ tension }}</span>
+      </div>
     </div>
 
     <div class="demo-section" :class="{ 'demo-dark': tema === 'dark' }">
@@ -163,6 +179,7 @@ const slotCode = `<CardLinhas legenda="Receita" :data="data" exportar>
         descricao="acumulado no semestre"
         :tipoValor="tipoValor"
         :corDetalhes="corDetalhes"
+        :tension="tension"
         :data="data"
         :detalheTooltip="(item) => `${item.pedidos} pedidos`"
         :botaoVisivel="true"
@@ -188,6 +205,15 @@ const slotCode = `<CardLinhas legenda="Receita" :data="data" exportar>
     </p>
     <CodeBlock :code="tooltipCode" language="vue" />
 
+    <h2>Ajustando a curvatura da linha</h2>
+    <p>
+      Desde a <strong>2.0.12</strong>, a prop <code>tension</code> controla o quanto a linha é
+      suavizada. O padrão <code>0.45</code> mantém a curva arredondada; <code>0</code> liga os
+      pontos com segmentos retos, útil quando os valores precisam ser lidos com precisão. Valores
+      fora do intervalo são limitados a 0–1:
+    </p>
+    <CodeBlock :code="tensionCode" language="vue" />
+
     <h2>Substituindo textos com slots</h2>
     <p>Use os slots de cabeçalho para inserir markup rico no lugar das props de texto:</p>
     <CodeBlock :code="slotCode" language="vue" />
@@ -212,4 +238,5 @@ const slotCode = `<CardLinhas legenda="Receita" :data="data" exportar>
 .control-btn.active { background: var(--color-accent-soft); border-color: var(--color-accent-border); color: var(--color-accent-2); }
 .color-input { width: 32px; height: 28px; border: 1px solid var(--color-border); border-radius: 4px; cursor: pointer; background: transparent; }
 .color-value { font-size: 0.8rem; font-family: var(--font-mono); color: var(--color-text-muted); }
+.range-input { width: 140px; accent-color: var(--color-accent-2); cursor: pointer; }
 </style>
